@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
     Card,
     Input,
@@ -13,9 +13,11 @@ import {
     ListItemPrefix,
     Collapse,
     CardHeader,
-    CardBody
+    CardBody,
+    Chip
 } from "@material-tailwind/react";
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import TaskContext from '../context/TaskContext';
 
 
 
@@ -25,24 +27,24 @@ export function AddTaskForm(props) {
 
     const toggleOpen = () => setOpen((cur) => !cur);
 
-    const allUsers = [
-        {
-            userId: '1',
-            userName: 'Praveen',
-            role: 'developer'
-        },
-        {
-            userId: '2',
-            userName: 'hemanth',
-            role: 'tester'
-        },
-        {
-            userId: '3',
-            userName: 'Gopi',
-            role: 'designer'
-        },
-    ]
-    // const [user, setUser] = useState(allUsers);
+    // const allUsers = [
+    //     {
+    //         userId: '66fedfde58743fffb9292eeb',
+    //         userName: 'Praveen',
+    //         role: 'developer'
+    //     },
+    //     {
+    //         userId: '66fedfde58743fffb9292eec',
+    //         userName: 'hemanth',
+    //         role: 'tester'
+    //     },
+    //     {
+    //         userId: '66fedfde58743fffb9292eed',
+    //         userName: 'Gopi',
+    //         role: 'designer'
+    //     },
+    // ]
+
     const [task, setTask] = useState({
         taskName: '',
         taskDescription: '',
@@ -52,12 +54,10 @@ export function AddTaskForm(props) {
     })
 
     const inputChange = (e) => {
-        // console.log(e);
         setTask({
             ...task,
             [e.target.name]: e.target.value,
         })
-        // console.log(task);
     }
 
     const selectPriority = (e) => {
@@ -82,14 +82,14 @@ export function AddTaskForm(props) {
                 ...task,
                 taskMembers: [
                     ...task.taskMembers,
-                    allUsers.find(u => u.userId === id),
+                    teamMembers.find(member => member._id === id),
                 ]
             })
         } else {
             setTask({
                 ...task,
                 taskMembers: [
-                    ...task.taskMembers.filter(member => member.userId !== id)
+                    ...task.taskMembers.filter(member => member._id !== id)
                 ]
             })
         }
@@ -97,8 +97,19 @@ export function AddTaskForm(props) {
 
     const formSubmit = (e) => {
         e.preventDefault();
-        console.log(task);
+        createTask(task);
+        setTask({
+            taskName: '',
+            taskDescription: '',
+            taskPriority: '',
+            taskStatus: '',
+            taskMembers: [],
+        })
     }
+
+    const context = useContext(TaskContext);
+    const { createTask, teamMembers } = context;
+
 
     return (
         <Card color="transparent" shadow={false}>
@@ -120,11 +131,11 @@ export function AddTaskForm(props) {
                         {/* <Typography variant="h6"  color="blue-gray" className="-mb-3">
                         Task Name
                     </Typography> */}
-                        <Input name='taskName' required onChange={inputChange} label='Name' placeholder='Enter Task Name' />
+                        <Input name='taskName' required minLength={3} onChange={inputChange} label='Name' placeholder='Enter Task Name' />
                         {/* <Typography variant="h6" color="blue-gray" className="-mb-3">
                         Task Description
                     </Typography> */}
-                        <Input name='taskDescription' required onChange={inputChange} label='Description' placeholder='Enter Task Description' />
+                        <Input name='taskDescription' required minLength={5} onChange={inputChange} label='Description' placeholder='Enter Task Description' />
                         <div>
                             {/* <Typography variant="h6" color="blue-gray" className="mb-3">
                                 Task Priority
@@ -140,7 +151,7 @@ export function AddTaskForm(props) {
                                 Task Status
                             </Typography> */}
                             <Select onChange={selectStatus} label="Select Status">
-                                <Option value='In progress'>In Progress</Option>
+                                <Option value='In Progress'>In Progress</Option>
                                 <Option value='ToDo'>ToDo</Option>
                                 <Option value='Completed'>Completed</Option>
                             </Select>
@@ -157,26 +168,31 @@ export function AddTaskForm(props) {
                             <Collapse open={open} >
                                 <Card shadow={false}>
                                     <List>
-                                        {allUsers.map(({ userName, userId }, index) => (
-                                            <ListItem key={index} className="p-0">
+                                        {teamMembers.map(({ firstName, lastName, _id, role }) => (
+                                            // <Badge content={role}>
+                                            <ListItem key={_id} className="p-0">
                                                 <label
-                                                    htmlFor={userId}
+                                                    htmlFor={_id}
                                                     className="flex w-full cursor-pointer items-center px-3 py-2"
                                                 >
                                                     <ListItemPrefix className="mr-3">
                                                         <Checkbox
                                                             onChange={selectUser}
-                                                            value={userId}
-                                                            id={userId}
+                                                            value={_id}
+                                                            id={_id}
                                                             className="hover:before:opacity-0"
                                                             containerProps={{
                                                                 className: "p-0",
                                                             }}
                                                         />
                                                     </ListItemPrefix>
-                                                    <Typography color="blue-gray" className="font-medium">
-                                                        {userName}
-                                                    </Typography>
+                                                    {/* <Typography color="blue-gray" className="font-medium">
+                                                        {firstName}
+                                                    </Typography> */}
+                                                    <div color="blue-gray" className="font-medium w-full flex justify-between items-center">
+                                                        <Typography>{firstName} {lastName}</Typography>
+                                                        <Chip color='red' value={role} />
+                                                    </div>
                                                 </label>
                                             </ListItem>
                                         ))}
@@ -185,8 +201,8 @@ export function AddTaskForm(props) {
                             </Collapse>
                         </div>
                     </div>
-                    <Button className="mt-6" type='submit' fullWidth>
-                        sign up
+                    <Button className="mt-6" type='submit' onClick={props.handleOpenAddForm} fullWidth>
+                        Add Task
                     </Button>
                 </form>
             </CardBody>
@@ -197,14 +213,16 @@ export function AddTaskForm(props) {
 
 
 
-export function EditTaskForm(props) {
-    const { name, date, priority, status } = props.editingTask;
+export function EditTaskForm() {
+    const context = useContext(TaskContext);
+    const { editingTask, handleOpenEditForm, updateTask } = context
+    const { taskName, taskDescription, taskPriority, taskStatus, _id } = editingTask;
 
     const [editTask, setEditTask] = useState({
-        taskName: name,
-        taskDescription: date,
-        taskPriority: priority,
-        taskStatus: status,
+        taskName: taskName,
+        taskDescription: taskDescription,
+        taskPriority: taskPriority,
+        taskStatus: taskStatus,
     })
 
     const inputChange = (e) => {
@@ -212,7 +230,6 @@ export function EditTaskForm(props) {
             ...editTask,
             [e.target.name]: e.target.value,
         })
-        // console.log(task);
     }
 
     const selectPriority = (e) => {
@@ -230,7 +247,8 @@ export function EditTaskForm(props) {
 
     const formSubmit = (e) => {
         e.preventDefault();
-        console.log(task);
+        updateTask(_id, editTask)
+        // console.log(task);
     }
     return (
         <Card color="transparent" shadow={false}>
@@ -241,7 +259,7 @@ export function EditTaskForm(props) {
                 <IconButton
                     size="sm"
                     variant="text"
-                    onClick={props.handleOpenEditForm}
+                    onClick={handleOpenEditForm}
                 >
                     <XMarkIcon className="h-4 w-4 stroke-2" />
                 </IconButton>
@@ -252,19 +270,19 @@ export function EditTaskForm(props) {
                         {/* <Typography variant="h6"  color="blue-gray" className="-mb-3">
                         Task Name
                     </Typography> */}
-                        <Input name='taskName' value={editTask.taskName} required onChange={inputChange} label='Edit Name' />
+                        <Input name='taskName' value={editTask.taskName} required minLength={3} onChange={inputChange} label='Edit Name' />
                         {/* <Typography variant="h6" color="blue-gray" className="-mb-3">
                         Task Description
                     </Typography> */}
-                        <Input name='taskDescription' value={editTask.taskDescription} required onChange={inputChange} label='Edit Description' />
+                        <Input name='taskDescription' value={editTask.taskDescription} minLength={5} required onChange={inputChange} label='Edit Description' />
                         <div>
                             {/* <Typography variant="h6" color="blue-gray" className="mb-3">
                                 Task Priority
                             </Typography> */}
                             <Select onChange={selectPriority} value={editTask.taskPriority} label='Change Priority'>
-                                <Option value='High'>High Priority</Option>
-                                <Option value='Low'>Low Priority</Option>
-                                <Option value='Normal'>Normal Priority</Option>
+                                <Option className='mt-1' value='High'>High Priority</Option>
+                                <Option className='mt-1' value='Low'>Low Priority</Option>
+                                <Option className='mt-1' value='Normal'>Normal Priority</Option>
                             </Select>
                         </div>
                         <div>
@@ -272,13 +290,13 @@ export function EditTaskForm(props) {
                                 Task Status
                             </Typography> */}
                             <Select onChange={selectStatus} value={editTask.taskStatus} label="Change Status">
-                                <Option value='In Progress'>In Progress</Option>
-                                <Option value='ToDo'>ToDo</Option>
-                                <Option value='Completed'>Completed</Option>
+                                <Option className='mt-1' value='In Progress'>In Progress</Option>
+                                <Option className='mt-1' value='ToDo'>ToDo</Option>
+                                <Option className='mt-1' value='Completed'>Completed</Option>
                             </Select>
                         </div>
                     </div>
-                    <Button className="mt-6" type='submit' fullWidth>
+                    <Button className="mt-6" type='submit' onClick={handleOpenEditForm} fullWidth>
                         Edit Task
                     </Button>
                 </form>

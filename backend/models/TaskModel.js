@@ -29,26 +29,33 @@ const TaskSchema = new Schema({
         },
         _id: false,
     }],
-    subTask: {
+    subTask: [{
         subTaskName: {
             type: String,
         },
-        subTaskDescription: {
+        subTaskRole: {
             type: String
-        }
-    },
+        },
+        date: {
+            type: Date,
+        },
+        _id: false,
+
+    }],
     taskMembers: [{
-        userId: {
+        _id: {
             type: Schema.Types.ObjectId,
             ref: 'UserDetails'
         },
-        userName: {
+        firstName: {
+            type: String
+        },
+        lastName: {
             type: String
         },
         role: {
             type: String
         },
-        _id: false,
     }],
     date: {
         type: Date,

@@ -1,26 +1,38 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import SideBarSimple from './SidebarSimple'
 import AllTasks from './AllTasks'
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import Dashboard from './Dashboard'
-import TaskStatus from './TaskStatus'
 import TeamMembers from './TeamMembers'
+import TaskContext from '../context/TaskContext'
+import TaskDetail from './TaskDetail'
 
 function Home() {
+    const context = useContext(TaskContext);
+    const { getAllTasks, getTeamMembers } = context;
+    useEffect(() => {
+        getTeamMembers();
+        getAllTasks()
+    }, [])
+
+
     return (
-        <Router>
-            <div className='flex'>
-                <SideBarSimple />
-                <div className='flex-grow'>
-                    <Routes>
-                        <Route exact path='/' element={<Dashboard />} />
-                        <Route exact path='/allTasks' element={<AllTasks />} />
-                        <Route exact path='/tasks/:status' element={<TaskStatus />} />
-                        <Route exact path='/teamMembers' element={<TeamMembers />} />
-                    </Routes>
-                </div>
+
+        <div className='flex'>
+            <SideBarSimple />
+            <div className='flex-grow'>
+                <Routes>
+                    <Route exact path='/' element={<Dashboard />} />
+                    <Route exact path='/allTasks' element={<AllTasks />} />
+                    <Route exact path='/tasks/:status' element={<AllTasks />} />
+                    <Route exact path='/task/:taskId' element={<TaskDetail />} />
+                    {/* <Route exact path='/tasks/inProgress' element={<AllTasks key='inProgress' status='In progress' />} />
+                            <Route exact path='/tasks/todo' element={<AllTasks key='ToDo' status='ToDo' />} />
+                            <Route exact path='/tasks/completed' element={<AllTasks key='completed' status='Completed' />} />*/}
+                    <Route exact path='/teamMembers' element={<TeamMembers />} />
+                </Routes>
             </div>
-        </Router>
+        </div>
 
     )
 }

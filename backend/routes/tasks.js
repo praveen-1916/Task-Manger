@@ -7,7 +7,7 @@ import fetchUser from "../middleware/fetchUser.js";
 const router = Router();
 
 
-router.post('/createtask', fetchUser, [
+router.post('/createTask', fetchUser, [
     body('taskName', 'Please enter a valid name').isLength({ min: 3 }),
     body('taskDescription', 'Please enter a valid email').isLength({ min: 5 }),
 ],
@@ -30,7 +30,7 @@ router.post('/createtask', fetchUser, [
     })
 
 
-router.delete('/deletetask/:id', fetchUser, async (req, res) => {
+router.delete('/deleteTask/:id', fetchUser, async (req, res) => {
     try {
         const taskId = req.params.id;
         const userId = req.userId;
@@ -65,12 +65,37 @@ router.post('/addcomment/:id', fetchUser, [
             if (!task) {
                 res.status(400).json({ success: false, errorMsg: 'This task not found in our database' })
             } else {
-                const teamMemberId = task.taskMembers.find((teamMember) => { return teamMember.userId.toString() === userId })?.userId;
+                const teamMemberId = task.taskMembers.find((teamMember) => { return teamMember._id.toString() === userId })?._id;
                 if (task.adminId.toString() === userId || teamMemberId) {
                     await Task.findByIdAndUpdate(taskId, { $push: { taskTimeLine: { userName, userMsg, date: Date() } } })
                     res.json({ success: true, msg: 'Comment added successfully' })
                 } else {
                     res.json({ success: false, errorMsg: 'Your not allowed to update this task' })
+                }
+            }
+        } catch (error) {
+            res.status(400).json({ success: false, errorMsg: 'Internal server error!', err: error })
+        }
+    })
+
+router.post('/addsubtask/:id', fetchUser, [
+    body('subTaskName', 'Please enter a valid name').isLength({ min: 3 }),
+    body('subTaskRole', 'Please enter a valid message').isLength({ min: 3 }),
+],
+    async (req, res) => {
+        try {
+            const taskId = req.params.id;
+            const userId = req.userId;
+            const task = await Task.findById(taskId);
+            const { subTaskName, subTaskRole } = req.body;
+            if (!task) {
+                res.status(400).json({ success: false, errorMsg: 'This task not found in our database' })
+            } else {
+                if (task.adminId.toString() === userId) {
+                    await Task.findByIdAndUpdate(taskId, { $push: { subTask: { subTaskName, subTaskRole, date: Date() } } })
+                    res.json({ success: true, msg: 'Sub-Task added successfully' })
+                } else {
+                    res.json({ success: false, errorMsg: 'Your not allowed to add sub task' })
                 }
             }
         } catch (error) {
@@ -87,7 +112,7 @@ router.put('/updateTask/:id', fetchUser,
             if (!task) {
                 res.status(400).json({ success: false, errorMsg: 'This task not found in our database' })
             } else {
-                const teamMemberId = task.taskMembers.find((teamMember) => { return teamMember.userId.toString() === userId })?.userId;
+                const teamMemberId = task.taskMembers.find((teamMember) => { return teamMember._id.toString() === userId })?._id;
                 if (task.adminId.toString() === userId || teamMemberId) {
                     await Task.findByIdAndUpdate(taskId, { $set: req.body });
                     res.json({ success: true, msg: 'Task updated successfully' })
@@ -106,7 +131,7 @@ router.get('/getAllTasks', fetchUser,
         try {
             const userId = req.userId;
             const admin = req.header('admin');
-            if (admin === 'true') {
+            if (admin) {
                 const allTasks = await Task.find({ adminId: userId });
                 res.json({ success: true, allTasks });
             } else {

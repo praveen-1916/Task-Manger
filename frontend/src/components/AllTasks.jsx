@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
     Tabs,
     TabsHeader,
@@ -12,11 +12,20 @@ import {
 import { ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/solid';
 import TableViewTask from './TableViewTask';
 import BroadViewTask from './BroadViewTask';
-import { AddTaskForm } from './TaskFroms';
+import { AddTaskForm, EditTaskForm } from './TaskFroms';
+import TaskContext from '../context/TaskContext';
+import { useParams } from 'react-router-dom';
+
 
 function AllTasks() {
+
+    const context = useContext(TaskContext);
+    const { openEditForm, handleOpenEditForm, allTasks, statusTasks, taskStatusCheck } = context;
+
     const [openAddForm, setOpenAddForm] = React.useState(false);
-    const handleOpenAddForm = () => setOpenAddForm(!openAddForm);
+    const handleOpenAddForm = () => {
+        setOpenAddForm(!openAddForm);
+    }
 
     const [tableView, setTableView] = React.useState(true);
 
@@ -28,19 +37,29 @@ function AllTasks() {
         }
     }
 
+    const { status } = useParams();
+
     React.useEffect(() => {
+        if (status) {
+            console.log(status)
+            taskStatusCheck(status);
+        }
         window.addEventListener("resize", handleWindowResize);
 
         return () => {
             window.removeEventListener("resize", handleWindowResize);
         };
-    }, []);
+    }, [status, allTasks]);
+
 
     return (
         <>
             <Button onClick={handleOpenAddForm} variant="gradient">Add Task</Button>
             <Dialog size='sm' open={openAddForm} handler={handleOpenAddForm} >
                 <AddTaskForm handleOpenAddForm={handleOpenAddForm} />
+            </Dialog>
+            <Dialog size='sm' open={openEditForm} handler={handleOpenEditForm} >
+                <EditTaskForm />
             </Dialog>
             <Tabs value="broadView" className='m-6'>
                 <TabsHeader>
@@ -70,10 +89,12 @@ function AllTasks() {
                 }}
                 >
                     <TabPanel className='px-0' value='broadView'>
-                        <BroadViewTask />
+                        {status ? <BroadViewTask tasks={statusTasks} />
+                            : <BroadViewTask tasks={allTasks} />}
                     </TabPanel>
                     {tableView && <TabPanel className='px-0' value='tableView'>
-                        <TableViewTask />
+                        {status ? <TableViewTask tasks={statusTasks} />
+                            : <TableViewTask tasks={allTasks} />}
                     </TabPanel>}
                 </TabsBody>
             </Tabs>

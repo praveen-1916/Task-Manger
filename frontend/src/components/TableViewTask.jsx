@@ -1,43 +1,55 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Typography, Chip, Tooltip, Card, } from "@material-tailwind/react";
 import { ChevronDoubleUpIcon, PencilIcon, ChevronUpDownIcon, ChevronUpIcon, TrashIcon } from '@heroicons/react/24/solid';
+import TaskContext from '../context/TaskContext';
 
 const TABLE_HEAD = ["Task Title", "Priority", "Created On", "Status", "Team", "", ""];
-const TABLE_ROWS = [
-    {
-        name: "John Michael",
-        priority: "High",
-        date: "23/04/18",
-        status: "In Progress"
+// const TABLE_ROWS = [
+//     {
+//         name: "John Michael",
+//         priority: "High",
+//         date: "23/04/18",
+//         status: "In Progress"
 
-    },
-    {
-        name: "Alexa Liras",
-        priority: "Low",
-        date: "23/04/18",
-        status: "In Progress"
-    },
-    {
-        name: "Laurent Perrier",
-        priority: "High",
-        date: "19/09/17",
-        status: "Completed"
-    },
-    {
-        name: "Michael Levi",
-        priority: "Low",
-        date: "24/12/08",
-        status: "ToDo"
-    },
-    {
-        name: "Richard Gran",
-        priority: "Normal",
-        date: "04/10/21",
-        status: "Completed"
-    },
-];
+//     },
+//     {
+//         name: "Alexa Liras",
+//         priority: "Low",
+//         date: "23/04/18",
+//         status: "In Progress"
+//     },
+//     {
+//         name: "Laurent Perrier",
+//         priority: "High",
+//         date: "19/09/17",
+//         status: "Completed"
+//     },
+//     {
+//         name: "Michael Levi",
+//         priority: "Low",
+//         date: "24/12/08",
+//         status: "ToDo"
+//     },
+//     {
+//         name: "Richard Gran",
+//         priority: "Normal",
+//         date: "04/10/21",
+//         status: "Completed"
+//     },
+// ];
 
-export default function TableViewTask() {
+export default function TableViewTask(props) {
+    const { tasks } = props;
+    const context = useContext(TaskContext);
+    const { editTask } = context;
+
+    const taskDate = (date) => {
+        return new Date(date).toLocaleDateString();
+    }
+
+    // const {}
+    // const context = useContext(TaskContext);
+    // const { allTasks, statusTasks } = context;
 
     return (
         <Card className="h-full w-full overflow-hidden">
@@ -61,60 +73,60 @@ export default function TableViewTask() {
                     </tr>
                 </thead>
                 <tbody>
-                    {TABLE_ROWS.map(({ name, priority, date, status }, index) => (
+                    {tasks.map((task, index) => (
                         <tr key={index} className="even:bg-blue-gray-50/50">
                             <td className="p-4 flex items-center gap-2">
-                                {priority !== 'Normal' && <p className={priority === 'High' ? 'h-3 w-3 rounded-full bg-red-900' : 'h-3 w-3 rounded-full bg-amber-900'}></p>}
-                                {priority === 'Normal' && <p className={'h-3 w-3 rounded-full bg-green-900'}></p>}
+                                {task.taskPriority !== 'Normal' && <p className={task.taskPriority === 'High' ? 'h-3 w-3 rounded-full bg-red-900' : 'h-3 w-3 rounded-full bg-amber-900'}></p>}
+                                {task.taskPriority === 'Normal' && <p className={'h-3 w-3 rounded-full bg-green-900'}></p>}
                                 <Typography variant="small" color="blue-gray" className="text-sm text-cyan-500 tracking-wide">
-                                    {name}
+                                    {task.taskName}
                                 </Typography>
                             </td>
                             <td className="p-4">
-                                {priority === "High" &&
+                                {task.taskPriority === "High" &&
                                     <div className='flex items-center gap-2'>
                                         <ChevronDoubleUpIcon className="h-4 w-4 text-red-900" />
                                         <Typography variant="small" className='tracking-wide font-medium text-red-900' >
-                                            {priority} Priority
+                                            {task.taskPriority} Priority
                                         </Typography>
                                     </div>
                                 }
-                                {priority === 'Low' &&
+                                {task.taskPriority === 'Low' &&
                                     <div className='flex items-center gap-2'>
                                         <ChevronUpIcon className='h-4 w-4 text-amber-900' />
                                         <Typography variant="small" className='tracking-wide font-medium text-amber-900' >
-                                            {priority} Priority
+                                            {task.taskPriority} Priority
                                         </Typography>
                                     </div>
                                 }
                                 {/* {priority !== 'Normal' && <Typography variant="small" className={priority === 'High' ? 'tracking-wide font-medium text-red-900' : 'tracking-wide font-medium text-amber-900'}>
                                     {priority} Priority
                                 </Typography>} */}
-                                {priority === 'Normal' && <Typography variant="small" className={'tracking-wide font-medium text-green-700'}>
-                                    {priority} Priority
+                                {task.taskPriority === 'Normal' && <Typography variant="small" className='tracking-wide font-medium text-green-700'>
+                                    {task.taskPriority} Priority
                                 </Typography>}
                             </td>
                             <td className="p-4">
                                 <Typography variant="small" color="blue-gray" className="font-normal">
-                                    {date}
+                                    {taskDate(task.date)}
                                 </Typography>
                             </td>
                             <td className="p-4">
-                                {status !== 'Completed' && <Chip
+                                {task.taskStatus !== 'Completed' && <Chip
                                     variant="ghost"
-                                    color={status === 'ToDo' ? 'blue' : 'amber'}
+                                    color={task.taskStatus === 'ToDo' ? 'blue' : 'amber'}
                                     size="sm"
-                                    value={status}
+                                    value={task.taskStatus}
                                     className='w-min'
                                     icon={
-                                        <span className={status === 'ToDo' ? "mx-auto mt-1 block h-2 w-2 rounded-full bg-blue-900 content-['']" : "mx-auto mt-1 block h-2 w-2 rounded-full bg-amber-800 content-['']"} />
+                                        <span className={task.taskStatus === 'ToDo' ? "mx-auto mt-1 block h-2 w-2 rounded-full bg-blue-900 content-['']" : "mx-auto mt-1 block h-2 w-2 rounded-full bg-amber-800 content-['']"} />
                                     }
                                 />}
-                                {status === "Completed" && <Chip
+                                {task.taskStatus === "Completed" && <Chip
                                     variant="ghost"
                                     color="green"
                                     size="sm"
-                                    value={status}
+                                    value={task.taskStatus}
                                     className='w-min'
                                     icon={
                                         <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" />
@@ -126,7 +138,7 @@ export default function TableViewTask() {
                                     Team
                                 </Typography>
                             </td>
-                            <td className="p-4">
+                            <td className="p-4" onClick={() => { editTask(task) }}>
                                 <Tooltip content="Edit" animate={{
                                     mount: { scale: 1, y: 0 },
                                     unmount: { scale: 0, y: 25 },

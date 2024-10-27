@@ -7,7 +7,7 @@ import {
     Button,
     Chip,
 } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { PlusIcon, ChevronDoubleUpIcon, ChevronUpIcon, FolderOpenIcon, EllipsisHorizontalIcon, PencilIcon, DocumentDuplicateIcon, TrashIcon } from "@heroicons/react/24/solid";
 import {
     Menu,
@@ -15,7 +15,8 @@ import {
     MenuList,
     MenuItem,
 } from "@material-tailwind/react";
-
+import TaskContext from "../context/TaskContext";
+import { useNavigate } from "react-router-dom";
 
 
 // function CardOptions() {
@@ -53,28 +54,33 @@ import {
 
 
 
-export default function TaskItem(props) {
-    const { editTask, task } = props;
-    const { name, priority, date, status } = props.task;
+function TaskItem(props) {
+    const navigate = useNavigate();
+    const { task } = props;
+    const { taskName, taskPriority, date, taskStatus, _id } = props.task;
     const [priorityColor, setPriorityColor] = useState('')
 
     const colorFunc = () => {
-        if (priority === "High") {
+        if (taskPriority === "High") {
             setPriorityColor('red')
-        } else if (priority === "Low") {
+        } else if (taskPriority === "Low") {
             setPriorityColor('amber')
         } else {
             setPriorityColor('green')
         }
     }
 
+    const context = useContext(TaskContext);
+    const { editTask } = context
+
     useEffect(() => {
         colorFunc();
-    }, [])
+    }, [task])
 
     const capitalizing = (word) => {
         return word.toUpperCase();
     }
+
 
     return (
         <Card className="w-auto">
@@ -84,7 +90,7 @@ export default function TaskItem(props) {
                     {priorityColor === 'red' && <ChevronDoubleUpIcon color="red" className="h-4 w-4 text-red-700" />}
                     {priorityColor === 'amber' && <ChevronUpIcon color="orange" className="h-4 w-4 text-amber-700" />}
                     <p className={`text-${priorityColor}-700 font-bold text-sm tracking-wide`}>
-                        {capitalizing(priority)} PRIORITY
+                        {capitalizing(taskPriority)} PRIORITY
                     </p>
                 </div>
                 <Menu placement="bottom-end">
@@ -92,7 +98,7 @@ export default function TaskItem(props) {
                         <EllipsisHorizontalIcon className="h-5 w-5" />
                     </MenuHandler>
                     <MenuList>
-                        <MenuItem className="flex items-center gap-2 rounded">
+                        <MenuItem className="flex items-center gap-2 rounded" onClick={() => navigate(`/task/${_id}`)}>
                             <FolderOpenIcon className="h-4 w-4" />
                             <Typography className="text-xs font-bold">Open Task</Typography>
                         </MenuItem>
@@ -119,17 +125,17 @@ export default function TaskItem(props) {
                 <div>
                     <div className="flex gap-2 items-center">
                         <p className={`h-3 w-3 rounded-full bg-${priorityColor}-900`}></p>
-                        <p className="font-semibold text-sm text-cyan-500 tracking-wide">{name}</p>
+                        <p className="font-semibold text-sm text-cyan-500 tracking-wide">{taskName}</p>
                     </div>
                     <p className="text-xs my-2 text font-bold tracking-wide text-gray-600">{date}</p>
 
                     <hr />
                     <div className="my-2">
-                        {status !== 'Completed' && <Chip variant="ghost" color={status === 'ToDo' ? 'blue' : 'amber'} size="sm" value={status} className='w-min' icon={
-                            <span className={status === 'ToDo' ? "mx-auto mt-1 block h-2 w-2 rounded-full bg-blue-900 content-['']" : "mx-auto mt-1 block h-2 w-2 rounded-full bg-amber-800 content-['']"} />
+                        {taskStatus !== 'Completed' && <Chip variant="ghost" color={taskStatus === 'ToDo' ? 'blue' : 'amber'} value={taskStatus} size="sm" className='w-min' icon={
+                            <span className={taskStatus === 'ToDo' ? "mx-auto mt-1 block h-2 w-2 rounded-full bg-blue-900 content-['']" : "mx-auto mt-1 block h-2 w-2 rounded-full bg-amber-800 content-['']"} />
                         }
                         />}
-                        {status === "Completed" && <Chip variant="ghost" color="green" className='w-min' size="sm" value={status} icon={
+                        {taskStatus === "Completed" && <Chip variant="ghost" color="green" size="sm" className='w-min' value={taskStatus} icon={
                             <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" />
                         }
                         />}
@@ -148,3 +154,5 @@ export default function TaskItem(props) {
     );
 }
 
+
+export default TaskItem

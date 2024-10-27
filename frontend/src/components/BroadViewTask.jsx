@@ -1,66 +1,85 @@
 import React from 'react'
-import { EditTaskForm } from "./TaskFroms";
 import TaskItem from './TaskItem';
-import { Dialog } from '@material-tailwind/react';
+// import TaskContext from '../context/TaskContext';
+// import { useParams } from 'react-router-dom';
 
-const TABLE_ROWS = [
-    {
-        name: "John Michael",
-        priority: "High",
-        date: "23/04/18",
-        status: "In Progress"
+// const TABLE_ROWS = [
+//     {
+//         name: "John Michael",
+//         priority: "High",
+//         date: "23/04/18",
+//         status: "In Progress"
 
-    },
-    {
-        name: "Alexa Liras",
-        priority: "Low",
-        date: "23/04/18",
-        status: "In Progress"
-    },
-    {
-        name: "Laurent Perrier",
-        priority: "High",
-        date: "19/09/17",
-        status: "Completed"
-    },
-    {
-        name: "Michael Levi",
-        priority: "Low",
-        date: "24/12/08",
-        status: "ToDo"
-    },
-    {
-        name: "Richard Gran",
-        priority: "Normal",
-        date: "04/10/21",
-        status: "Completed"
-    },
-];
+//     },
+//     {
+//         name: "Alexa Liras",
+//         priority: "Low",
+//         date: "23/04/18",
+//         status: "In Progress"
+//     },
+//     {
+//         name: "Laurent Perrier",
+//         priority: "High",
+//         date: "19/09/17",
+//         status: "Completed"
+//     },
+//     {
+//         name: "Michael Levi",
+//         priority: "Low",
+//         date: "24/12/08",
+//         status: "ToDo"
+//     },
+//     {
+//         name: "Richard Gran",
+//         priority: "Normal",
+//         date: "04/10/21",
+//         status: "Completed"
+//     },
+// ];
 
 
 
-export default function BroadViewTask() {
-
-    const [editingTask, setEditingTask] = React.useState();
-    const [openEditForm, setOpenEditForm] = React.useState(false);
-    const handleOpenEditForm = () => setOpenEditForm(!openEditForm);
-
-    const editTask = (task) => {
-        setOpenEditForm(!openEditForm);
-        setEditingTask(task);
-    }
+export default function BroadViewTask(props) {
+    const { tasks } = props;
 
     return (
-        <>
-            <Dialog size='sm' aria-hidden={openEditForm} open={openEditForm} handler={handleOpenEditForm} >
-                <EditTaskForm editingTask={editingTask} handleOpenEditForm={handleOpenEditForm} />
-            </Dialog>
-            <div className='grid lg:grid-cols-3 md:grid-cols-2 gap-5' >
-                {TABLE_ROWS.map((row, index) => {
-                    return <TaskItem key={index} task={row} editTask={editTask} />
-                })}
-            </div>
-        </>
+        <div className='grid lg:grid-cols-3 md:grid-cols-2 gap-5' >
+            {tasks ? tasks.map((task, index) => (
+                <TaskItem key={index} task={task} />
+            )) : 'Loading...'}
+        </div>
     )
+
+    // const context = useContext(TaskContext);
+    // const { allTasks, statusTasks, taskStatusCheck } = context;
+
+    // const { status } = useParams()
+    // useEffect(() => {
+    //     console.log(status)
+    //     if (status) {
+    //         taskStatusCheck(status)
+    //     }
+    // }, [status])
+
+
+    // if (status) {
+    //     return (
+    //         <div className='grid lg:grid-cols-3 md:grid-cols-2 gap-5' >
+    //             {statusTasks.length > 0 ? statusTasks.map((task, index) => (
+    //                 <TaskItem key={index} task={task} />
+    //             )) : 'Loading...'}
+    //         </div>
+    //     )
+    // } else {
+    //     return (
+    //         <>
+    //             <div className='grid lg:grid-cols-3 md:grid-cols-2 gap-5' >
+    //                 {allTasks.length > 0 ? allTasks.map((task, index) => (
+    //                     <TaskItem key={index} task={task} />
+    //                 )) : 'Loading...'}
+    //             </div>
+    //         </>
+    //     )
+    // }
 }
 
