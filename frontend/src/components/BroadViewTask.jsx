@@ -46,40 +46,9 @@ export default function BroadViewTask(props) {
         <div className='grid lg:grid-cols-3 md:grid-cols-2 gap-5' >
             {tasks ? tasks.map((task, index) => (
                 <TaskItem key={index} task={task} />
-            )) : 'Loading...'}
+            )) : <h4>Loading...</h4>}
         </div>
     )
 
-    // const context = useContext(TaskContext);
-    // const { allTasks, statusTasks, taskStatusCheck } = context;
-
-    // const { status } = useParams()
-    // useEffect(() => {
-    //     console.log(status)
-    //     if (status) {
-    //         taskStatusCheck(status)
-    //     }
-    // }, [status])
-
-
-    // if (status) {
-    //     return (
-    //         <div className='grid lg:grid-cols-3 md:grid-cols-2 gap-5' >
-    //             {statusTasks.length > 0 ? statusTasks.map((task, index) => (
-    //                 <TaskItem key={index} task={task} />
-    //             )) : 'Loading...'}
-    //         </div>
-    //     )
-    // } else {
-    //     return (
-    //         <>
-    //             <div className='grid lg:grid-cols-3 md:grid-cols-2 gap-5' >
-    //                 {allTasks.length > 0 ? allTasks.map((task, index) => (
-    //                     <TaskItem key={index} task={task} />
-    //                 )) : 'Loading...'}
-    //             </div>
-    //         </>
-    //     )
-    // }
 }
 

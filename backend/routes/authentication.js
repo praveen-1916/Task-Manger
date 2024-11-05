@@ -119,7 +119,7 @@ router.get('/getTeamMembers', fetchUser,
     async (req, res) => {
         try {
             const adminId = req.userId;
-            const teamMembersDetails = await User.find({ adminId: adminId }, { _id: true, role: true, firstName: true, lastName: true })
+            const teamMembersDetails = await User.find({ adminId: adminId }, { _id: true, role: true, firstName: true, lastName: true, email: true })
             res.json({ success: true, teamMembersDetails })
         } catch (error) {
             res.status(400).json({ success: false, errorMsg: 'Internal server error!', err: error })

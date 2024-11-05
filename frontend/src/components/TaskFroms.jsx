@@ -8,6 +8,7 @@ import {
     Typography,
     Select,
     Option,
+    Textarea,
     List,
     ListItem,
     ListItemPrefix,
@@ -16,7 +17,8 @@ import {
     CardBody,
     Chip
 } from "@material-tailwind/react";
-import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { ArrowRightCircleIcon, ChevronDownIcon, EyeIcon, EyeSlashIcon, XMarkIcon } from '@heroicons/react/24/solid';
+
 import TaskContext from '../context/TaskContext';
 
 
@@ -27,23 +29,6 @@ export function AddTaskForm(props) {
 
     const toggleOpen = () => setOpen((cur) => !cur);
 
-    // const allUsers = [
-    //     {
-    //         userId: '66fedfde58743fffb9292eeb',
-    //         userName: 'Praveen',
-    //         role: 'developer'
-    //     },
-    //     {
-    //         userId: '66fedfde58743fffb9292eec',
-    //         userName: 'hemanth',
-    //         role: 'tester'
-    //     },
-    //     {
-    //         userId: '66fedfde58743fffb9292eed',
-    //         userName: 'Gopi',
-    //         role: 'designer'
-    //     },
-    // ]
 
     const [task, setTask] = useState({
         taskName: '',
@@ -75,7 +60,7 @@ export function AddTaskForm(props) {
         })
     }
 
-    const selectUser = (e) => {
+    const selectTeamMember = (e) => {
         const { checked, id } = e.target;
         if (checked) {
             setTask({
@@ -162,8 +147,7 @@ export function AddTaskForm(props) {
                                 <p className='font-light text-gray-600'>Select Users</p>
                                 <ChevronDownIcon
                                     strokeWidth={2.5}
-                                    className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""
-                                        }`} />
+                                    className={`h-3 w-3 transition-transform ${open && "rotate-180"}`} />
                             </Button>
                             <Collapse open={open} >
                                 <Card shadow={false}>
@@ -177,7 +161,7 @@ export function AddTaskForm(props) {
                                                 >
                                                     <ListItemPrefix className="mr-3">
                                                         <Checkbox
-                                                            onChange={selectUser}
+                                                            onChange={selectTeamMember}
                                                             value={_id}
                                                             id={_id}
                                                             className="hover:before:opacity-0"
@@ -190,8 +174,8 @@ export function AddTaskForm(props) {
                                                         {firstName}
                                                     </Typography> */}
                                                     <div color="blue-gray" className="font-medium w-full flex justify-between items-center">
-                                                        <Typography>{firstName} {lastName}</Typography>
-                                                        <Chip color='red' value={role} />
+                                                        <Typography color="blue-gray">{firstName} {lastName}</Typography>
+                                                        <Chip color='red' size='sm' value={role} />
                                                     </div>
                                                 </label>
                                             </ListItem>
@@ -209,8 +193,6 @@ export function AddTaskForm(props) {
         </Card>
     );
 }
-
-
 
 
 export function EditTaskForm() {
@@ -305,3 +287,230 @@ export function EditTaskForm() {
     )
 }
 
+
+export function AddTaskTimelineForm(props) {
+
+    const context = useContext(TaskContext);
+    const { userDetails, addActivity, timelineIcons } = context;
+
+    const { handleOpenAddActivityForm, taskId } = props;
+
+    const [activityDetails, setActivityDetails] = useState({
+        userName: userDetails.firstName,
+        userMsg: '',
+        iconLabel: '',
+    })
+
+    const selectActivity = (e) => {
+        setActivityDetails({
+            ...activityDetails,
+            iconLabel: e
+        })
+    }
+
+    const textAreaMsg = (e) => {
+        setActivityDetails({
+            ...activityDetails,
+            userMsg: e.target.value
+        })
+    }
+
+    const formSubmit = (e) => {
+        e.preventDefault();
+        addActivity(taskId, activityDetails);
+    }
+
+    return (
+        <Card color="transparent" shadow={false} >
+            <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
+                <Typography variant="h4" color="blue-gray">
+                    Add Activity
+                </Typography>
+                <IconButton
+                    size="sm"
+                    variant="text"
+                    onClick={handleOpenAddActivityForm}
+                >
+                    <XMarkIcon className="h-4 w-4 stroke-2" />
+                </IconButton>
+            </CardHeader>
+            <CardBody>
+                <form onSubmit={formSubmit}>
+                    <Select onChange={selectActivity} label="Select Activity">
+                        {timelineIcons.map(({ label, icon, color }, index) => (
+                            <Option key={index} value={label}>
+                                <div className='flex items-center gap-2'>
+                                    {React.createElement(icon, {
+                                        className: `h-6 w-6 text-${color}-900`,
+                                    })}
+                                    <Typography variant='small' color='blue-gray'>Task {label}</Typography>
+                                </div>
+                            </Option>
+                        ))}
+                    </Select>
+                    <div className='mt-4 mb-2'>
+                        <Textarea color="gray" name='userMsg' onChange={textAreaMsg} required label="Message" />
+                    </div>
+
+                    <Button type='submit' fullWidth onClick={handleOpenAddActivityForm}>Add Activity</Button>
+                </form>
+            </CardBody>
+        </Card >
+    )
+
+}
+
+export function AddSubTaskForm() {
+
+    const subTaskRoles = ['Designing', 'Developing', 'Testing', 'Bug Fixing', 'Planning', 'UI&UX',]
+
+    const context = useContext(TaskContext);
+    const { addSubTask, handleOpenAddSubTaskForm, subTaskId } = context;
+
+    const [subTaskDetails, setSubTaskDetails] = useState({
+        subTaskName: '',
+        subTaskRole: '',
+    })
+
+    const selectSubTaskRole = (e) => {
+        setSubTaskDetails({
+            ...subTaskDetails,
+            subTaskRole: e
+        })
+    }
+
+    const inputChange = (e) => {
+        setSubTaskDetails({
+            ...subTaskDetails,
+            subTaskName: e.target.value
+        })
+    }
+
+    const formSubmit = (e) => {
+        e.preventDefault();
+        console.log(subTaskId)
+        addSubTask(subTaskId, subTaskDetails);
+    }
+
+    return (
+        <Card color="transparent" shadow={false} >
+            <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
+                <Typography variant="h4" color="blue-gray">
+                    Add Sub-Task
+                </Typography>
+                <IconButton
+                    size="sm"
+                    variant="text"
+                    onClick={handleOpenAddSubTaskForm}
+                >
+                    <XMarkIcon className="h-4 w-4 stroke-2" />
+                </IconButton>
+            </CardHeader>
+            <CardBody>
+                <form onSubmit={formSubmit}>
+                    <Select onChange={selectSubTaskRole} label="Select Activity">
+                        {subTaskRoles.map((role, index) => (
+                            <Option key={index} value={role}>
+                                <div className='flex items-center gap-2'>
+                                    <ArrowRightCircleIcon className='h-5 w-5' stroke={2} />
+                                    <Typography variant='small' className='font-medium tracking-wide' color='blue-gray'>{role}</Typography>
+                                </div>
+                            </Option>
+                        ))}
+                    </Select>
+                    <div className='my-4'>
+                        <Input color="gray" minLength={3} placeholder='Enter Sub-Task Name' onChange={inputChange} required label="Sub-Task Name" />
+                    </div>
+
+                    <Button type='submit' fullWidth onClick={handleOpenAddSubTaskForm}>Add Sub-Task</Button>
+                </form>
+            </CardBody>
+        </Card >
+    )
+
+}
+
+export function AddTeamMemberForm(props) {
+    const { handleOpenAddTeamMemberForm } = props;
+    const teamMemberRoles = ['UI&UX Designer', 'Frontend Developer', 'Backend Developer', 'Full-Stack Developer', 'Cloud Engineer', 'Tester', 'Business Analyst', 'DevOps Engineer', 'Others'];
+
+    const [teamMemberDetails, setTeamMmberDetails] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        role: '',
+    })
+    const context = useContext(TaskContext);
+    const { teamMembers } = context;
+
+    const inputChange = (e) => {
+        setTeamMmberDetails({
+            ...teamMemberDetails,
+            [e.target.name]: e.target.value,
+        })
+    }
+
+    const selectRole = (e) => {
+        setTeamMmberDetails({
+            ...teamMemberDetails,
+            role: e
+        })
+    }
+
+    const formSubmit = (e) => {
+        e.preventDefault();
+        console.log(teamMemberDetails);
+        setTeamMmberDetails({
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            role: '',
+        })
+    }
+
+    const [passwordType, setPasswordType] = useState('password');
+    const showPass = () => {
+        if (passwordType === 'password') {
+            setPasswordType('text');
+        } else {
+            setPasswordType('password')
+        }
+    }
+
+    return (
+        <Card color="transparent" shadow={false}>
+            <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
+                <Typography variant="h4" color="blue-gray">
+                    Add Team Member
+                </Typography>
+                <IconButton
+                    size="sm"
+                    variant="text"
+                    onClick={handleOpenAddTeamMemberForm}
+                >
+                    <XMarkIcon className="h-4 w-4 stroke-2" />
+                </IconButton>
+            </CardHeader>
+            <CardBody>
+                <form onSubmit={formSubmit}>
+                    <div className="mb-1 flex flex-col gap-6">
+                        <Input type='text' name='firstName' required minLength={3} onChange={inputChange} label='First Name' placeholder='Enter First Name' />
+                        <Input type='text' name='lastName' minLength={1} onChange={inputChange} label='Last Name' placeholder='Enter Last Name' />
+                        <Input type='email' required name='email' onChange={inputChange} label='Email' placeholder='Enter Email' />
+                        <Input type={passwordType} required name='password' onChange={inputChange} label='Password' placeholder='Enter Password' icon={passwordType === 'password' ? <EyeSlashIcon onClick={showPass} className='h-5 w-5 cursor-pointer' /> : <EyeIcon onClick={showPass} className='h-5 w-5 cursor-pointer' />} />
+                        <Select onChange={selectRole} label='Select Role'>
+                            {teamMemberRoles.map((role, index) => (
+                                <Option key={index} value={role}>{role}</Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <Button className="mt-6" type='submit' fullWidth>
+                        Add Member
+                    </Button>
+                </form>
+            </CardBody>
+        </Card>
+    )
+}

@@ -1,8 +1,41 @@
 import React, { useState } from 'react'
 import TaskContext from './TaskContext'
+import { BugAntIcon, ChatBubbleLeftEllipsisIcon, CheckCircleIcon, ClockIcon, HandThumbUpIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
 
 function TaskState(props) {
 
+    const timelineIcons = [
+        {
+            label: "Started",
+            icon: HandThumbUpIcon,
+            color: "indigo"
+        },
+        {
+            label: "Doubt",
+            icon: QuestionMarkCircleIcon,
+            color: "gray",
+        },
+        {
+            label: "Completed",
+            icon: CheckCircleIcon,
+            color: "green"
+        },
+        {
+            label: "In Progress",
+            icon: ClockIcon,
+            color: "amber"
+        },
+        {
+            label: "Comment",
+            icon: ChatBubbleLeftEllipsisIcon,
+            color: "purple"
+        },
+        {
+            label: "Bug",
+            icon: BugAntIcon,
+            color: "red"
+        },
+    ];
 
 
     //creating new task 
@@ -101,23 +134,24 @@ function TaskState(props) {
         }
     }
 
+
+    // filtering tasks by its status 
     const [statusTasks, setStatusTasks] = useState([])
     const taskStatusCheck = (status) => {
-        // console.log(allTasks)
         const tasks = allTasks.filter(task => { return task.taskStatus === status })
         console.log(tasks)
         setStatusTasks(tasks);
     }
 
-    const [detailedTask, setDetailedTask] = useState(null)
+    // filtering a task from all tasks by clicking on a particular task
+    const [taskDetails, setTaskDetails] = useState(null)
     const getTaskdetails = (taskId) => {
-        // console.log(typeof (taskId));
         const task = allTasks.find(task => task._id === taskId);
-        console.log(task)
-        setDetailedTask(task);
+        console.log(task);
+        setTaskDetails(task);
     }
 
-
+    //fetching all team members 
     const [teamMembers, setTeamMembers] = useState([])
     const getTeamMembers = async () => {
         try {
@@ -127,7 +161,6 @@ function TaskState(props) {
                 headers: {
                     "Content-Type": "application/json",
                     "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0",
-                    "admin": 'true'
                 }
             });
             const data = await response.json();
@@ -138,8 +171,92 @@ function TaskState(props) {
         }
     }
 
+    // fetching user details
+    const [userDetails, setUserDetails] = useState()
+    const getUser = async () => {
+        try {
+            const apiUrl = import.meta.env.VITE_URL_END_POINT + import.meta.env.VITE_GET_USER;
+            const response = await fetch(apiUrl, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0",
+                }
+            });
+            const data = await response.json();
+            console.log(data);
+            setUserDetails(data.userDetails);
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+
+    // adding activities to task with proper security
+
+
+
+    const addActivity = async (taskId, activityDetails) => {
+        try {
+            const apiUrl = import.meta.env.VITE_URL_END_POINT + import.meta.env.VITE_ADD_ACTIVITY + taskId;
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0"
+                },
+                body: JSON.stringify(activityDetails),
+            });
+            const data = await response.json();
+            if (data.success) {
+                getAllTasks();
+            }
+            console.log(data)
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    //adding a subtask to a particular task
+
+    const [openAddSubTaskForm, setOpenAddSubTaskForm] = React.useState(false);
+    const handleOpenAddSubTaskForm = () => {
+        setOpenAddSubTaskForm(!openAddSubTaskForm);
+    }
+
+    const [subTaskId, setSubTaskId] = useState(null)
+    const openSubTaskForm = (id) => {
+        console.log('Sub Task Clicked');
+        setSubTaskId(id);
+        setOpenAddSubTaskForm(!openAddSubTaskForm);
+    }
+
+
+
+    const addSubTask = async (taskId, subTaskDetails) => {
+        try {
+            const apiUrl = import.meta.env.VITE_URL_END_POINT + import.meta.env.VITE_ADD_SUB_TASK + taskId;
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0"
+                },
+                body: JSON.stringify(subTaskDetails),
+            });
+            const data = await response.json();
+            if (data.success) {
+                getAllTasks();
+            }
+            console.log(data)
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+
     return (
-        <TaskContext.Provider value={{ createTask, getAllTasks, updateTask, deleteTask, getTeamMembers, teamMembers, allTasks, openEditForm, editingTask, handleOpenEditForm, editTask, taskStatusCheck, statusTasks, getTaskdetails, detailedTask }}>
+        <TaskContext.Provider value={{ createTask, getAllTasks, updateTask, deleteTask, getTeamMembers, teamMembers, allTasks, openEditForm, editingTask, handleOpenEditForm, editTask, taskStatusCheck, statusTasks, getTaskdetails, taskDetails, userDetails, getUser, addActivity, timelineIcons, addSubTask, openAddSubTaskForm, openSubTaskForm, subTaskId, handleOpenAddSubTaskForm }}>
             {props.children}
         </TaskContext.Provider>
     )

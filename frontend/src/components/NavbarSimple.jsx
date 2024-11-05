@@ -1,7 +1,6 @@
 import React from "react";
 import {
     Navbar,
-    //   MobileNav,
     Typography,
     Button,
     Menu,
@@ -9,22 +8,19 @@ import {
     MenuList,
     MenuItem,
     Avatar,
-    // Collapse,
-    //   Card,
-    // IconButton,
+    Drawer,
 } from "@material-tailwind/react";
-// import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import {
     UserCircleIcon,
-    //   CodeBracketSquareIcon,
     ChevronDownIcon,
     Cog6ToothIcon,
     InboxArrowDownIcon,
     LifebuoyIcon,
     PowerIcon,
-    //   RocketLaunchIcon,
-    //   Bars2Icon,
+
 } from "@heroicons/react/24/solid";
+import SideBarSimple from "./SidebarSimple";
 
 
 const profileMenuItems = [
@@ -109,32 +105,55 @@ function ProfileMenu() {
     );
 }
 
-// function NavList() {
-//     return (
-//         <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-//             <ProfileMenu />
-//         </ul>
-//     );
-// }
 
 export default function NavbarSimple() {
+    const [openNav, setOpenNav] = React.useState(false);
+
+    const handleWindowResize = () => {
+        if (window.innerWidth >= 960) {
+            setOpenNav(false)
+        } else {
+            setOpenNav(true)
+        }
+    }
+
+    React.useEffect(() => {
+        window.addEventListener("resize", handleWindowResize);
+
+        return () => {
+            window.removeEventListener("resize", handleWindowResize);
+        };
+    }, []);
+
+    const [open, setOpen] = React.useState(false);
+    const openDrawer = () => setOpen(true);
+    const closeDrawer = () => setOpen(false);
 
     return (
-        <Navbar className="sticky top-0 z-50 mx-auto px-6 py-3">
-            <div className="flex items-center justify-between text-blue-gray-900">
-                <Typography
-                    as="a"
-                    href="#"
-                    variant="h6"
-                    className="mr-4 cursor-pointer py-1.5"
-                >
-                    Material Tailwind
-                </Typography>
-                <div className="lg:block">
-                    <ProfileMenu />
+        <>
+            <Navbar className="sticky top-0 z-50 mx-auto px-6 py-3 ">
+                <div className="flex items-center justify-between text-blue-gray-900">
+                    {openNav && <div>
+                        <Bars3Icon className="h-5 w-5" color="black" onClick={openDrawer} />
+                        <Drawer open={open} onClose={closeDrawer}>
+                            <SideBarSimple closeDrawer={closeDrawer} openNav={openNav} />
+                        </Drawer>
+                    </div>}
+                    <Typography
+                        as="a"
+                        href="#"
+                        variant="h6"
+                        className="mr-4 cursor-pointer py-1.5"
+                    >
+                        Material Tailwind
+                    </Typography>
+                    <div className="lg:block">
+                        <ProfileMenu />
+                    </div>
                 </div>
-            </div>
-        </Navbar>
+            </Navbar>
+        </>
     );
 }
+
 

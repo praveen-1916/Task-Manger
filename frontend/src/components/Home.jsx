@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import SideBarSimple from './SidebarSimple'
 import AllTasks from './AllTasks'
 import { Routes, Route } from "react-router-dom"
@@ -6,33 +6,53 @@ import Dashboard from './Dashboard'
 import TeamMembers from './TeamMembers'
 import TaskContext from '../context/TaskContext'
 import TaskDetail from './TaskDetail'
+import { AddSubTaskForm } from './TaskFroms'
+import { Dialog } from '@material-tailwind/react'
 
 function Home() {
     const context = useContext(TaskContext);
-    const { getAllTasks, getTeamMembers } = context;
+    const { getAllTasks, getTeamMembers, openAddSubTaskForm, handleOpenAddSubTaskForm, getUser } = context;
+
+    const [openNav, setOpenNav] = useState(false);
+
+    const handleWindowResize = () => {
+        if (window.innerWidth >= 960) {
+            setOpenNav(false)
+        } else {
+            setOpenNav(true)
+        }
+    }
+
     useEffect(() => {
         getTeamMembers();
-        getAllTasks()
-    }, [])
+        getAllTasks();
+        getUser();
+        window.addEventListener("resize", handleWindowResize);
+        return () => {
+            window.removeEventListener("resize", handleWindowResize);
+        };
+    }, []);
+
 
 
     return (
-
-        <div className='flex'>
-            <SideBarSimple />
-            <div className='flex-grow'>
-                <Routes>
-                    <Route exact path='/' element={<Dashboard />} />
-                    <Route exact path='/allTasks' element={<AllTasks />} />
-                    <Route exact path='/tasks/:status' element={<AllTasks />} />
-                    <Route exact path='/task/:taskId' element={<TaskDetail />} />
-                    {/* <Route exact path='/tasks/inProgress' element={<AllTasks key='inProgress' status='In progress' />} />
-                            <Route exact path='/tasks/todo' element={<AllTasks key='ToDo' status='ToDo' />} />
-                            <Route exact path='/tasks/completed' element={<AllTasks key='completed' status='Completed' />} />*/}
-                    <Route exact path='/teamMembers' element={<TeamMembers />} />
-                </Routes>
+        <>
+            <div className='flex'>
+                {!openNav && <SideBarSimple />}
+                <div className='flex-grow bg-gray-50'>
+                    <Routes>
+                        <Route exact path='/' element={<Dashboard />} />
+                        <Route exact path='/allTasks' element={<AllTasks />} />
+                        <Route exact path='/tasks/:status' element={<AllTasks />} />
+                        <Route exact path='/task/:taskId' element={<TaskDetail />} />
+                        <Route exact path='/teamMembers' element={<TeamMembers />} />
+                    </Routes>
+                </div>
             </div>
-        </div>
+            <Dialog size='sm' open={openAddSubTaskForm} handler={handleOpenAddSubTaskForm}>
+                <AddSubTaskForm />
+            </Dialog>
+        </>
 
     )
 }

@@ -1,42 +1,14 @@
 import React, { useContext } from 'react'
-import { Typography, Chip, Tooltip, Card, } from "@material-tailwind/react";
+import {
+    Typography, Chip, Tooltip, Card, Popover,
+    PopoverHandler,
+    PopoverContent,
+} from "@material-tailwind/react";
 import { ChevronDoubleUpIcon, PencilIcon, ChevronUpDownIcon, ChevronUpIcon, TrashIcon } from '@heroicons/react/24/solid';
 import TaskContext from '../context/TaskContext';
 
-const TABLE_HEAD = ["Task Title", "Priority", "Created On", "Status", "Team", "", ""];
-// const TABLE_ROWS = [
-//     {
-//         name: "John Michael",
-//         priority: "High",
-//         date: "23/04/18",
-//         status: "In Progress"
+const TABLE_HEAD = ["Task Title", "Priority", "Created On", "Status", "Team"];
 
-//     },
-//     {
-//         name: "Alexa Liras",
-//         priority: "Low",
-//         date: "23/04/18",
-//         status: "In Progress"
-//     },
-//     {
-//         name: "Laurent Perrier",
-//         priority: "High",
-//         date: "19/09/17",
-//         status: "Completed"
-//     },
-//     {
-//         name: "Michael Levi",
-//         priority: "Low",
-//         date: "24/12/08",
-//         status: "ToDo"
-//     },
-//     {
-//         name: "Richard Gran",
-//         priority: "Normal",
-//         date: "04/10/21",
-//         status: "Completed"
-//     },
-// ];
 
 export default function TableViewTask(props) {
     const { tasks } = props;
@@ -47,17 +19,13 @@ export default function TableViewTask(props) {
         return new Date(date).toLocaleDateString();
     }
 
-    // const {}
-    // const context = useContext(TaskContext);
-    // const { allTasks, statusTasks } = context;
-
     return (
         <Card className="h-full w-full overflow-hidden">
-            <table className="w-full min-w-min table-auto text-left">
+            <table className="w-full min-w-min table-fixed text-left">
                 <thead>
                     <tr>
                         {TABLE_HEAD.map((head, index) => (
-                            <th key={index} className=" border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+                            <th key={index} className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
                                 <div className='flex items-center gap-1'>
                                     <Typography
                                         variant="small"
@@ -66,21 +34,25 @@ export default function TableViewTask(props) {
                                     >
                                         {head}
                                     </Typography>
-                                    {head && <ChevronUpDownIcon className='h-5 w-5' />}
+                                    <ChevronUpDownIcon className='h-5 w-5' />
                                 </div>
                             </th>
                         ))}
+                        <th className='w-16 border-b border-blue-gray-100 bg-blue-gray-50 p-4'></th>
+                        <th className='w-16 border-b border-blue-gray-100 bg-blue-gray-50 p-4'></th>
                     </tr>
                 </thead>
                 <tbody>
                     {tasks.map((task, index) => (
                         <tr key={index} className="even:bg-blue-gray-50/50">
-                            <td className="p-4 flex items-center gap-2">
-                                {task.taskPriority !== 'Normal' && <p className={task.taskPriority === 'High' ? 'h-3 w-3 rounded-full bg-red-900' : 'h-3 w-3 rounded-full bg-amber-900'}></p>}
-                                {task.taskPriority === 'Normal' && <p className={'h-3 w-3 rounded-full bg-green-900'}></p>}
-                                <Typography variant="small" color="blue-gray" className="text-sm text-cyan-500 tracking-wide">
-                                    {task.taskName}
-                                </Typography>
+                            <td className="p-4">
+                                <div className='flex items-center gap-2'>
+                                    {task.taskPriority !== 'Normal' && <p className={task.taskPriority === 'High' ? 'h-3 w-3 rounded-full bg-red-900' : 'h-3 w-3 rounded-full bg-amber-900'}></p>}
+                                    {task.taskPriority === 'Normal' && <p className={'h-3 w-3 rounded-full bg-green-900'}></p>}
+                                    <Typography variant="small" color="blue-gray" className="text-sm text-cyan-500 tracking-wide">
+                                        {task.taskName}
+                                    </Typography>
+                                </div>
                             </td>
                             <td className="p-4">
                                 {task.taskPriority === "High" &&
@@ -99,9 +71,6 @@ export default function TableViewTask(props) {
                                         </Typography>
                                     </div>
                                 }
-                                {/* {priority !== 'Normal' && <Typography variant="small" className={priority === 'High' ? 'tracking-wide font-medium text-red-900' : 'tracking-wide font-medium text-amber-900'}>
-                                    {priority} Priority
-                                </Typography>} */}
                                 {task.taskPriority === 'Normal' && <Typography variant="small" className='tracking-wide font-medium text-green-700'>
                                     {task.taskPriority} Priority
                                 </Typography>}
@@ -117,7 +86,7 @@ export default function TableViewTask(props) {
                                     color={task.taskStatus === 'ToDo' ? 'blue' : 'amber'}
                                     size="sm"
                                     value={task.taskStatus}
-                                    className='w-min'
+                                    className='w-min shadow-md shadow-blue-gray-300'
                                     icon={
                                         <span className={task.taskStatus === 'ToDo' ? "mx-auto mt-1 block h-2 w-2 rounded-full bg-blue-900 content-['']" : "mx-auto mt-1 block h-2 w-2 rounded-full bg-amber-800 content-['']"} />
                                     }
@@ -127,18 +96,44 @@ export default function TableViewTask(props) {
                                     color="green"
                                     size="sm"
                                     value={task.taskStatus}
-                                    className='w-min'
+                                    className='w-min shadow-md shadow-green-600'
                                     icon={
                                         <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" />
                                     }
                                 />}
                             </td>
                             <td className="p-4">
-                                <Typography as="a" href="#" variant="small" color="blue-gray" className="font-medium">
-                                    Team
-                                </Typography>
+                                <div className="flex items-center cursor-pointer">
+                                    {task.taskMembers.map(({ firstName, lastName, role, email }, index) => (
+                                        <Popover placement="top-end" key={index}>
+                                            <PopoverHandler >
+                                                <div className="h-8 w-8 -translate-x-1 first:translate-x-0 flex justify-center items-center rounded-full bg-indigo-900 shadow-md shadow-indigo-600">
+                                                    <p className='text-white text-sm font-medium'>{firstName.slice(0, 1) + lastName.slice(0, 1)}</p>
+                                                </div>
+                                            </PopoverHandler>
+                                            <PopoverContent className="z-50">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="h-12 w-12 flex justify-center items-center rounded-full bg-indigo-900 shadow-md shadow-indigo-600">
+                                                        <Typography className='text-white text-lg'>{firstName.slice(0, 1) + lastName.slice(0, 1)}</Typography>
+                                                    </div>
+                                                    <div>
+                                                        <Typography color="blue-gray" variant="h6">
+                                                            {firstName} {lastName}
+                                                        </Typography>
+                                                        <Typography variant="small" color="gray">
+                                                            {role}
+                                                        </Typography>
+                                                        <Typography variant="small" color="indigo">
+                                                            {email ? email : 'abcd@gmail.com'}
+                                                        </Typography>
+                                                    </div>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    ))}
+                                </div>
                             </td>
-                            <td className="p-4" onClick={() => { editTask(task) }}>
+                            <td className="p-2" onClick={() => { editTask(task) }}>
                                 <Tooltip content="Edit" animate={{
                                     mount: { scale: 1, y: 0 },
                                     unmount: { scale: 0, y: 25 },
@@ -146,7 +141,7 @@ export default function TableViewTask(props) {
                                     <PencilIcon className='h-5 w-5' />
                                 </Tooltip>
                             </td>
-                            <td className="p-4">
+                            <td className="p-2">
                                 <Tooltip content="Delete" className='bg-red-500/25 text-red-500'
                                     animate={{
                                         mount: { scale: 1, y: 0 },

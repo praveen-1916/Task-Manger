@@ -24,6 +24,9 @@ const TaskSchema = new Schema({
         userMsg: {
             type: String
         },
+        iconLabel: {
+            type: String
+        },
         date: {
             type: Date,
         },

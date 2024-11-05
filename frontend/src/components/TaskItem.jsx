@@ -6,6 +6,9 @@ import {
     Typography,
     Button,
     Chip,
+    Popover,
+    PopoverHandler,
+    PopoverContent,
 } from "@material-tailwind/react";
 import React, { useContext, useEffect, useState } from "react";
 import { PlusIcon, ChevronDoubleUpIcon, ChevronUpIcon, FolderOpenIcon, EllipsisHorizontalIcon, PencilIcon, DocumentDuplicateIcon, TrashIcon } from "@heroicons/react/24/solid";
@@ -55,10 +58,12 @@ import { useNavigate } from "react-router-dom";
 
 
 function TaskItem(props) {
+
     const navigate = useNavigate();
     const { task } = props;
-    const { taskName, taskPriority, date, taskStatus, _id } = props.task;
-    const [priorityColor, setPriorityColor] = useState('')
+    const { taskName, taskPriority, date, taskStatus, _id, subTask, taskMembers } = props.task;
+    const [priorityColor, setPriorityColor] = useState('');
+
 
     const colorFunc = () => {
         if (taskPriority === "High") {
@@ -71,7 +76,7 @@ function TaskItem(props) {
     }
 
     const context = useContext(TaskContext);
-    const { editTask } = context
+    const { editTask, openSubTaskForm } = context
 
     useEffect(() => {
         colorFunc();
@@ -80,10 +85,13 @@ function TaskItem(props) {
     const capitalizing = (word) => {
         return word.toUpperCase();
     }
+    const taskDate = (date) => {
+        return new Date(date).toDateString();
+    }
 
 
     return (
-        <Card className="w-auto">
+        <Card className="w-auto h-max">
             <CardHeader floated={false}
                 shadow={false} className="flex justify-between items-center">
                 <div className="flex gap-2 items-center">
@@ -106,7 +114,7 @@ function TaskItem(props) {
                             <PencilIcon className="h-4 w-4" />
                             <p className="text-xs font-bold">Edit Task</p>
                         </MenuItem>
-                        <MenuItem className="flex items-center gap-2 rounded">
+                        <MenuItem className="flex items-center gap-2 rounded" onClick={() => openSubTaskForm(_id)}>
                             <PlusIcon className="h-4 w-4" />
                             <Typography className="text-xs font-bold">Add Sub-Task</Typography>
                         </MenuItem>
@@ -130,24 +138,83 @@ function TaskItem(props) {
                     <p className="text-xs my-2 text font-bold tracking-wide text-gray-600">{date}</p>
 
                     <hr />
-                    <div className="my-2">
-                        {taskStatus !== 'Completed' && <Chip variant="ghost" color={taskStatus === 'ToDo' ? 'blue' : 'amber'} value={taskStatus} size="sm" className='w-min' icon={
+                    <div className="my-2 flex justify-between items-center">
+                        {taskStatus !== 'Completed' && <Chip variant="ghost" color={taskStatus === 'ToDo' ? 'blue' : 'amber'} value={taskStatus} size="sm" className='w-min shadow-md shadow-blue-gray-300' icon={
                             <span className={taskStatus === 'ToDo' ? "mx-auto mt-1 block h-2 w-2 rounded-full bg-blue-900 content-['']" : "mx-auto mt-1 block h-2 w-2 rounded-full bg-amber-800 content-['']"} />
                         }
                         />}
-                        {taskStatus === "Completed" && <Chip variant="ghost" color="green" size="sm" className='w-min' value={taskStatus} icon={
+                        {taskStatus === "Completed" && <Chip variant="ghost" color="green" size="sm" className='w-min shadow-md shadow-green-600' value={taskStatus} icon={
                             <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" />
                         }
                         />}
+                        <div className="flex items-center cursor-pointer">
+                            {taskMembers.map(({ firstName, lastName, role, email }, index) => (
+                                <Popover placement="top-end" key={index}>
+                                    <PopoverHandler >
+                                        <div className="h-8 w-8 -translate-x-1 first:translate-x-0 flex justify-center items-center rounded-full bg-indigo-900 shadow-md shadow-indigo-600">
+                                            <p className='text-white text-sm font-medium'>{firstName.slice(0, 1) + lastName.slice(0, 1)}</p>
+                                        </div>
+                                    </PopoverHandler>
+                                    <PopoverContent className="z-50">
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-12 w-12 flex justify-center items-center rounded-full bg-indigo-900 shadow-md shadow-indigo-600">
+                                                <Typography className='text-white text-lg'>{firstName.slice(0, 1) + lastName.slice(0, 1)}</Typography>
+                                            </div>
+                                            <div>
+                                                <Typography color="blue-gray" variant="h6">
+                                                    {firstName} {lastName}
+                                                </Typography>
+                                                <Typography variant="small" color="gray">
+                                                    {role}
+                                                </Typography>
+                                                <Typography variant="small" color="indigo">
+                                                    {email ? email : 'abc@gmail.com'}
+                                                </Typography>
+                                            </div>
+                                        </div>
+                                    </PopoverContent>
+                                </Popover>
+                            ))}
+                        </div>
                     </div>
                     <hr />
                 </div>
             </CardBody>
-            <CardFooter className="pt-0">
+            {/* <CardFooter className="pt-0">
                 <p>No Sub-Task</p>
-                <Button variant="text" className="mt-2 flex gap-2 items-center">
+                <Button variant="text" className="mt-2 flex gap-2 items-center" onClick={() => openSubTaskForm(_id)}>
                     <PlusIcon className="h-4 w-4 text-black" />
                     Add Subtask
+                </Button>
+            </CardFooter> */}
+            <CardFooter className="pt-0">
+                <Typography color="blue-gray" className='text-sm mb-2 font-semibold'>
+                    SUB-TASKS
+                </Typography>
+                <div className="divide-y divide-gray-200">
+                    {subTask.length > 0 ?
+                        subTask.map(({ subTaskName, subTaskRole, date }, index) => (
+                            <div key={index} className='flex items-center gap-2 pb-3 last:pb-0'>
+                                <div>
+                                    <div className='flex items-center gap-4'>
+                                        <p className="text-xs font-bold tracking-wide text-gray-600">{taskDate(date)}
+                                        </p>
+                                        <Chip color='indigo' value={subTaskRole !== '' ? subTaskRole : 'Sub-Assignment'} className='shadow-md shadow-indigo-600' />
+                                    </div>
+                                    <Typography className='mt-2 font-semibold text-sm tracking-wide text-gray-700'>
+                                        {subTaskName}
+                                    </Typography>
+                                </div>
+                            </div>
+                        )) :
+                        <Typography color="blue-gray" variant='lead' className="text-sm">
+                            No Sub-Tasks
+                        </Typography>
+                    }
+                </div>
+                <Button size="sm" variant="text" className="mt-4 flex gap-2 items-center" onClick={() => openSubTaskForm(_id)}>
+                    <PlusIcon className="h-4 w-4 text-black" />
+                    Add Sub-Task
                 </Button>
             </CardFooter>
         </Card>

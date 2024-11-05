@@ -52,22 +52,23 @@ router.delete('/deleteTask/:id', fetchUser, async (req, res) => {
 })
 
 
-router.post('/addcomment/:id', fetchUser, [
+router.post('/addActivity/:id', fetchUser, [
     body('userName', 'Please enter a valid name').isLength({ min: 3 }),
     body('userMsg', 'Please enter a valid message').isLength({ min: 3 }),
+    body('iconLabel', 'Please select activity').notEmpty(),
 ],
     async (req, res) => {
         try {
             const taskId = req.params.id;
             const userId = req.userId;
             const task = await Task.findById(taskId);
-            const { userName, userMsg } = req.body;
+            const { userName, userMsg, iconLabel } = req.body;
             if (!task) {
                 res.status(400).json({ success: false, errorMsg: 'This task not found in our database' })
             } else {
                 const teamMemberId = task.taskMembers.find((teamMember) => { return teamMember._id.toString() === userId })?._id;
                 if (task.adminId.toString() === userId || teamMemberId) {
-                    await Task.findByIdAndUpdate(taskId, { $push: { taskTimeLine: { userName, userMsg, date: Date() } } })
+                    await Task.findByIdAndUpdate(taskId, { $push: { taskTimeLine: { userName, userMsg, iconLabel, date: Date.now() } } })
                     res.json({ success: true, msg: 'Comment added successfully' })
                 } else {
                     res.json({ success: false, errorMsg: 'Your not allowed to update this task' })
