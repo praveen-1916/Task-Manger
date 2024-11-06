@@ -132,11 +132,11 @@ router.get('/getAllTasks', fetchUser,
         try {
             const userId = req.userId;
             const admin = req.header('admin');
-            if (admin) {
+            if (admin === 'true') {
                 const allTasks = await Task.find({ adminId: userId });
                 res.json({ success: true, allTasks });
             } else {
-                const allTasks = await Task.find({ "taskMembers.userId": userId })
+                const allTasks = await Task.find({ "taskMembers._id": userId })
                 res.json({ success: true, allTasks });
             }
         } catch (error) {

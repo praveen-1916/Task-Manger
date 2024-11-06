@@ -150,7 +150,7 @@ function TaskDetail() {
     return (
         <>
             <Breadcrumbs className='bg-transparent m-4'>
-                <Link to="/home/" className="opacity-60 text-base">
+                <Link to="/" className="opacity-60 text-base">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-4 w-4"
@@ -160,7 +160,7 @@ function TaskDetail() {
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                     </svg>
                 </Link>
-                <Link to="/home/allTasks" className="text-base opacity-60">
+                <Link to="/allTasks" className="text-base opacity-60">
                     <span>All Tasks</span>
                 </Link>
                 <Typography className="text-base opacity-60">
@@ -195,7 +195,6 @@ function TaskDetail() {
                     }}
                     >
                         <TabPanel className='px-0' value='taskInfo'>
-
                             <Card>
                                 <CardHeader floated={false} shadow={false}>
                                     <div className="flex gap-2 items-center">
@@ -304,10 +303,10 @@ function TaskDetail() {
                                             </Typography>
                                         }
                                     </div>
-                                    <Button color='indigo' variant='gradient' className="mt-8 flex gap-2 items-center" onClick={() => openSubTaskForm(taskDetails._id)}>
+                                    {localStorage.getItem('admin') === 'true' && <Button color='indigo' variant='gradient' className="mt-8 flex gap-2 items-center" onClick={() => openSubTaskForm(taskDetails._id)}>
                                         <PlusIcon className="h-5 w-5 text-white" />
                                         Add Sub-Task
-                                    </Button>
+                                    </Button>}
                                 </CardFooter>
                             </Card>
                         </TabPanel>
@@ -340,7 +339,7 @@ function TaskDetail() {
                                                                 <Typography variant="h5" color="blue-gray">
                                                                     {userName}
                                                                 </Typography>
-                                                                <div className='flex items-center gap-3'>
+                                                                <div className='shadow-red-600 flex items-center gap-3'>
                                                                     <Typography variant="small" color="gray" className="font-normal">
                                                                         {taskTimelineDate(date)}
                                                                     </Typography>

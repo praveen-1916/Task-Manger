@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import SideBarSimple from './SidebarSimple'
 import AllTasks from './AllTasks'
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, useNavigate } from "react-router-dom"
 import Dashboard from './Dashboard'
 import TeamMembers from './TeamMembers'
 import TaskContext from '../context/TaskContext'
@@ -10,6 +10,7 @@ import { AddSubTaskForm } from './TaskFroms'
 import { Dialog } from '@material-tailwind/react'
 
 function Home() {
+    const navigate = useNavigate();
     const context = useContext(TaskContext);
     const { getAllTasks, getTeamMembers, openAddSubTaskForm, handleOpenAddSubTaskForm, getUser } = context;
 
@@ -24,9 +25,16 @@ function Home() {
     }
 
     useEffect(() => {
-        getTeamMembers();
-        getAllTasks();
-        getUser();
+        if (localStorage.getItem('authToken') && localStorage.getItem('admin') === 'true') {
+            getTeamMembers();
+            getAllTasks();
+            getUser();
+        } else if (localStorage.getItem('authToken') && localStorage.getItem('admin') === 'false') {
+            getAllTasks();
+            getUser();
+        } else {
+            navigate('/login');
+        }
         window.addEventListener("resize", handleWindowResize);
         return () => {
             window.removeEventListener("resize", handleWindowResize);

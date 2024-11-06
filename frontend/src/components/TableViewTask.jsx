@@ -38,8 +38,8 @@ export default function TableViewTask(props) {
                                 </div>
                             </th>
                         ))}
-                        <th className='w-16 border-b border-blue-gray-100 bg-blue-gray-50 p-4'></th>
-                        <th className='w-16 border-b border-blue-gray-100 bg-blue-gray-50 p-4'></th>
+                        {localStorage.getItem('admin') === 'true' && <th className='w-16 border-b border-blue-gray-100 bg-blue-gray-50 p-4'></th>}
+                        {localStorage.getItem('admin') === 'true' && <th className='w-16 border-b border-blue-gray-100 bg-blue-gray-50 p-4'></th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -133,15 +133,15 @@ export default function TableViewTask(props) {
                                     ))}
                                 </div>
                             </td>
-                            <td className="p-2" onClick={() => { editTask(task) }}>
+                            {localStorage.getItem('admin') === 'true' && <td className="p-2" onClick={() => { editTask(task) }}>
                                 <Tooltip content="Edit" animate={{
                                     mount: { scale: 1, y: 0 },
                                     unmount: { scale: 0, y: 25 },
                                 }}>
                                     <PencilIcon className='h-5 w-5' />
                                 </Tooltip>
-                            </td>
-                            <td className="p-2">
+                            </td>}
+                            {localStorage.getItem('admin') === 'true' && <td className="p-2">
                                 <Tooltip content="Delete" className='bg-red-500/25 text-red-500'
                                     animate={{
                                         mount: { scale: 1, y: 0 },
@@ -149,7 +149,7 @@ export default function TableViewTask(props) {
                                     }}>
                                     <TrashIcon className='h-5 w-5 text-red-500' />
                                 </Tooltip>
-                            </td>
+                            </td>}
                         </tr>
                     ))}
                 </tbody>

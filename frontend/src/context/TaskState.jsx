@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import TaskContext from './TaskContext'
 import { BugAntIcon, ChatBubbleLeftEllipsisIcon, CheckCircleIcon, ClockIcon, HandThumbUpIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/solid';
+import { useNavigate } from 'react-router-dom';
 
 function TaskState(props) {
+    const navigate = useNavigate();
 
     const timelineIcons = [
         {
@@ -46,7 +48,7 @@ function TaskState(props) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0"
+                    "authToken": localStorage.getItem('authToken')
                 },
                 body: JSON.stringify(taskData),
             });
@@ -79,7 +81,7 @@ function TaskState(props) {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0"
+                    "authToken": localStorage.getItem('authToken')
                 },
                 body: JSON.stringify(taskData),
             });
@@ -102,7 +104,7 @@ function TaskState(props) {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
-                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0"
+                    "authToken": localStorage.getItem('authToken')
                 },
             });
             const data = await response.json();
@@ -122,8 +124,8 @@ function TaskState(props) {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0",
-                    "admin": true
+                    "authToken": localStorage.getItem('authToken'),
+                    "admin": localStorage.getItem('admin'),
                 }
             });
             const data = await response.json();
@@ -160,7 +162,7 @@ function TaskState(props) {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0",
+                    "authToken": localStorage.getItem('authToken'),
                 }
             });
             const data = await response.json();
@@ -180,7 +182,7 @@ function TaskState(props) {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0",
+                    "authToken": localStorage.getItem('authToken'),
                 }
             });
             const data = await response.json();
@@ -201,7 +203,7 @@ function TaskState(props) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0"
+                    "authToken": localStorage.getItem('authToken')
                 },
                 body: JSON.stringify(activityDetails),
             });
@@ -237,7 +239,7 @@ function TaskState(props) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0"
+                    "authToken": localStorage.getItem('authToken')
                 },
                 body: JSON.stringify(subTaskDetails),
             });
@@ -277,7 +279,7 @@ function TaskState(props) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0"
+                    "authToken": localStorage.getItem('authToken'),
                 },
                 body: JSON.stringify(teamMemberDetails),
             });
@@ -302,6 +304,11 @@ function TaskState(props) {
                 body: JSON.stringify(userDetails),
             });
             const data = await response.json();
+            if (data.success) {
+                localStorage.setItem('authToken', data.authToken);
+                localStorage.setItem('admin', data.admin);
+                navigate('/');
+            }
             console.log(data);
         } catch (error) {
             console.error(error.message);

@@ -9,9 +9,10 @@ import {
     Popover,
     PopoverHandler,
     PopoverContent,
+    IconButton,
 } from "@material-tailwind/react";
 import React, { useContext, useEffect, useState } from "react";
-import { PlusIcon, ChevronDoubleUpIcon, ChevronUpIcon, FolderOpenIcon, EllipsisHorizontalIcon, PencilIcon, DocumentDuplicateIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { PlusIcon, ChevronDoubleUpIcon, ChevronUpIcon, FolderOpenIcon, EllipsisHorizontalIcon, PencilIcon, DocumentDuplicateIcon, TrashIcon, ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
 import {
     Menu,
     MenuHandler,
@@ -101,33 +102,42 @@ function TaskItem(props) {
                         {capitalizing(taskPriority)} PRIORITY
                     </p>
                 </div>
-                <Menu placement="bottom-end">
-                    <MenuHandler>
-                        <EllipsisHorizontalIcon className="h-5 w-5" />
-                    </MenuHandler>
-                    <MenuList>
-                        <MenuItem className="flex items-center gap-2 rounded" onClick={() => navigate(`/task/${_id}`)}>
-                            <FolderOpenIcon className="h-4 w-4" />
-                            <Typography className="text-xs font-bold">Open Task</Typography>
-                        </MenuItem>
-                        <MenuItem className="flex items-center gap-2 rounded" onClick={() => editTask(task)}>
-                            <PencilIcon className="h-4 w-4" />
-                            <p className="text-xs font-bold">Edit Task</p>
-                        </MenuItem>
-                        <MenuItem className="flex items-center gap-2 rounded" onClick={() => openSubTaskForm(_id)}>
-                            <PlusIcon className="h-4 w-4" />
-                            <Typography className="text-xs font-bold">Add Sub-Task</Typography>
-                        </MenuItem>
-                        <MenuItem className="flex items-center gap-2 rounded">
-                            <DocumentDuplicateIcon className="h-4 w-4" />
-                            <Typography className="text-xs font-bold">Duplicate</Typography>
-                        </MenuItem>
-                        <MenuItem className="flex items-center gap-2 rounded hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10" color="red">
-                            <TrashIcon className="h-4 w-4 text-red-500" />
-                            <Typography className="text-xs font-bold " color="red">Delete</Typography>
-                        </MenuItem>
-                    </MenuList>
-                </Menu>
+                {localStorage.getItem('admin') === 'true' ?
+                    <Menu placement="bottom-end">
+                        <MenuHandler>
+                            <EllipsisHorizontalIcon className="h-5 w-5" />
+                        </MenuHandler>
+                        <MenuList>
+                            <MenuItem className="flex items-center gap-2 rounded" onClick={() => navigate(`/task/${_id}`)}>
+                                <FolderOpenIcon className="h-4 w-4" />
+                                <Typography className="text-xs font-bold">Open Task</Typography>
+                            </MenuItem>
+                            <MenuItem className="flex items-center gap-2 rounded" onClick={() => editTask(task)}>
+                                <PencilIcon className="h-4 w-4" />
+                                <p className="text-xs font-bold">Edit Task</p>
+                            </MenuItem>
+                            <MenuItem className="flex items-center gap-2 rounded" onClick={() => openSubTaskForm(_id)}>
+                                <PlusIcon className="h-4 w-4" />
+                                <Typography className="text-xs font-bold">Add Sub-Task</Typography>
+                            </MenuItem>
+                            <MenuItem className="flex items-center gap-2 rounded">
+                                <DocumentDuplicateIcon className="h-4 w-4" />
+                                <Typography className="text-xs font-bold">Duplicate</Typography>
+                            </MenuItem>
+                            <MenuItem className="flex items-center gap-2 rounded hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10" color="red">
+                                <TrashIcon className="h-4 w-4 text-red-500" />
+                                <Typography className="text-xs font-bold " color="red">Delete</Typography>
+                            </MenuItem>
+                        </MenuList>
+                    </Menu> :
+                    <IconButton
+                        size="sm"
+                        variant="text"
+                        className="rounded-full"
+                        onClick={() => navigate(`/task/${_id}`)}
+                    >
+                        <ArrowsPointingOutIcon className="h-4 w-4" stroke={2} />
+                    </IconButton>}
             </CardHeader>
             <CardBody className="p-4">
                 <div>
@@ -180,13 +190,6 @@ function TaskItem(props) {
                     <hr />
                 </div>
             </CardBody>
-            {/* <CardFooter className="pt-0">
-                <p>No Sub-Task</p>
-                <Button variant="text" className="mt-2 flex gap-2 items-center" onClick={() => openSubTaskForm(_id)}>
-                    <PlusIcon className="h-4 w-4 text-black" />
-                    Add Subtask
-                </Button>
-            </CardFooter> */}
             <CardFooter className="pt-0">
                 <Typography color="blue-gray" className='text-sm mb-2 font-semibold'>
                     SUB-TASKS
@@ -212,10 +215,10 @@ function TaskItem(props) {
                         </Typography>
                     }
                 </div>
-                <Button size="sm" variant="text" className="mt-4 flex gap-2 items-center" onClick={() => openSubTaskForm(_id)}>
+                {localStorage.getItem('admin') === 'true' && <Button size="sm" variant="text" className="mt-4 flex gap-2 items-center" onClick={() => openSubTaskForm(_id)}>
                     <PlusIcon className="h-4 w-4 text-black" />
                     Add Sub-Task
-                </Button>
+                </Button>}
             </CardFooter>
         </Card>
     );
