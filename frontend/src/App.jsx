@@ -5,6 +5,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 import TaskState from './context/TaskState';
 import Login from './components/login';
 import SignUp from './components/SignUp';
+import Footer from './components/Footer';
 // import TaskDetail from './components/TaskDetail';
 
 
@@ -21,6 +22,7 @@ function App() {
               <>
                 <NavbarSimple />
                 <Home />
+                <Footer />
               </>
             } />
           </Routes>

@@ -118,9 +118,16 @@ router.get('/getuser', fetchUser,
 router.get('/getTeamMembers', fetchUser,
     async (req, res) => {
         try {
-            const adminId = req.userId;
-            const teamMembersDetails = await User.find({ adminId: adminId }, { _id: true, role: true, firstName: true, lastName: true, email: true })
-            res.json({ success: true, teamMembersDetails })
+            const userId = req.userId;
+            const admin = req.header('admin');
+            if (admin === 'true') {
+                const teamMembersDetails = await User.find({ adminId: userId }, { _id: true, role: true, firstName: true, lastName: true, email: true })
+                res.json({ success: true, teamMembersDetails })
+            } else {
+                const user = await User.findById(userId, { password: false });
+                const teamMembersDetails = await User.find({ adminId: user.adminId }, { _id: true, role: true, firstName: true, lastName: true, email: true })
+                res.json({ success: true, teamMembersDetails })
+            }
         } catch (error) {
             res.status(400).json({ success: false, errorMsg: 'Internal server error!', err: error })
         }

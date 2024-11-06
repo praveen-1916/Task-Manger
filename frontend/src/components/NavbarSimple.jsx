@@ -139,7 +139,7 @@ export default function NavbarSimple() {
 
     return (
         <>
-            <Navbar className="sticky top-0 z-50 mx-auto px-6 py-3 ">
+            <Navbar className="w-full lg:shadow-none shadow-md max-w-full sticky top-0 z-50 lg:border-b border-b-0 border-b-gray-400 rounded-sm px-6 py-3">
                 <div className="flex items-center justify-between text-blue-gray-900">
                     {openNav && <div>
                         <Bars3Icon className="h-5 w-5" color="black" onClick={openDrawer} />
@@ -148,12 +148,10 @@ export default function NavbarSimple() {
                         </Drawer>
                     </div>}
                     <Typography
-                        as="a"
-                        href="#"
-                        variant="h6"
+                        variant="h5"
                         className="mr-4 cursor-pointer py-1.5"
                     >
-                        Material Tailwind
+                        Task Manager
                     </Typography>
                     <div className="lg:block">
                         <ProfileMenu />

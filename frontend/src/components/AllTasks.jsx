@@ -77,7 +77,7 @@ function AllTasks() {
                             <p className='font-normal tracking-wide'>Broad View</p>
                         </div>
                     </Tab>
-                    <Tab value='tableView' className='w-max p-2 bg-white shadow-md shadow-gray-500' disabled={!tableView}>
+                    <Tab value='tableView' className='w-max p-2 bg-white shadow-md shadow-gray-500'>
                         <div className='flex items-center gap-1'>
                             <ListBulletIcon className='h-5 w-5' />
                             <p className='font-normal tracking-wide'>Table View</p>
@@ -94,11 +94,21 @@ function AllTasks() {
                         {status ? <BroadViewTask tasks={statusTasks} />
                             : <BroadViewTask tasks={allTasks} />}
                     </TabPanel>
-                    {tableView ? <TabPanel className='px-0' value='tableView'>
-                        {status ? <TableViewTask tasks={statusTasks} />
-                            : <TableViewTask tasks={allTasks} />}
-                    </TabPanel> :
-                        <Typography variant='h6' color='blue-gray' className='text-center mt-8'>Table view is not supported in small screens. Please switch to the Broad View</Typography>}
+                    <TabPanel className='px-0' value='tableView'>
+                        {/* {status && tableView ? <TableViewTask tasks={statusTasks} /> : <Typography variant='h6' color='blue-gray' className='text-center mt-8'>Table view is not supported in small screens. Please switch to the Broad View</Typography>}
+
+                        {!status && tableView ? <TableViewTask tasks={allTasks} /> : <Typography variant='h6' color='blue-gray' className='text-center mt-8'>Table view is not supported in small screens. Please switch to the Broad View</Typography>} */}
+
+                        {status ?
+                            tableView ?
+                                <TableViewTask tasks={statusTasks} /> :
+                                <Typography variant='h6' color='blue-gray' className='text-center mt-8'>Table view is not supported in small screens. Please switch to the Broad View</Typography>
+                            :
+                            tableView ?
+                                <TableViewTask tasks={allTasks} /> :
+                                <Typography variant='h6' color='blue-gray' className='text-center mt-8'>Table view is not supported in small screens. Please switch to the Broad View</Typography>}
+
+                    </TabPanel>
                 </TabsBody>
             </Tabs>
         </>

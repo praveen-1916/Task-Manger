@@ -29,7 +29,7 @@ function TeamMembers() {
             </Dialog>
             {teamMembers.length > 0 ?
                 <div>
-                    <Card className="overflow-hidden m-6 md:block hidden">
+                    <Card className="overflow-hidden m-6 rounded-sm md:block hidden">
                         <table className="w-full h-max table-fixed text-left">
                             <thead>
                                 <tr>
@@ -80,7 +80,7 @@ function TeamMembers() {
                             </tbody>
                         </table>
                     </Card>
-                    <Card className='overflow-hidden m-6 md:hidden block'>
+                    <Card className='overflow-hidden m-6 rounded-sm md:hidden block'>
                         <div className="divide-y divide-gray-200 p-3">
                             {teamMembers.map(({ firstName, lastName, role, email }, index) => (
                                 <div key={index} className="pb-2 pt-2 last:pb-0">

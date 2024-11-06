@@ -25,11 +25,8 @@ function Home() {
     }
 
     useEffect(() => {
-        if (localStorage.getItem('authToken') && localStorage.getItem('admin') === 'true') {
+        if (localStorage.getItem('authToken')) {
             getTeamMembers();
-            getAllTasks();
-            getUser();
-        } else if (localStorage.getItem('authToken') && localStorage.getItem('admin') === 'false') {
             getAllTasks();
             getUser();
         } else {

@@ -70,7 +70,7 @@ export default function SideBarSimple(props) {
 
     return (
         <>
-            <Card className="h-[calc(100vh-66px)] sticky top-[66px] w-max max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5">
+            <Card className="h-[calc(100vh-66px)] lg:shadow-none shadow-md lg:border-b border-b-0 border-b-gray-500 rounded-sm sticky top-[66px] w-max max-w-[20rem] p-4">
                 <div className="mb-2 p-4 flex justify-between items-center">
                     {openNav && <Typography variant="h5" color="blue-gray">
                         Sidebar

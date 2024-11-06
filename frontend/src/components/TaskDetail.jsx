@@ -149,7 +149,7 @@ function TaskDetail() {
 
     return (
         <>
-            <Breadcrumbs className='bg-transparent m-4'>
+            <Breadcrumbs className='bg-transparent mx-8 my-6'>
                 <Link to="/" className="opacity-60 text-base">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +170,7 @@ function TaskDetail() {
 
             {taskDetails ?
                 <Tabs value="taskInfo" className='m-6'>
-                    <TabsHeader className="rounded-none bg-transparent pb-3 gap-5"
+                    <TabsHeader className="rounded-none bg-transparent mx-4 p-0 pb-3 gap-5"
                         indicatorProps={{
                             className:
                                 "bg-transparent border-b-2 border-gray-900 rounded-none",
@@ -195,7 +195,7 @@ function TaskDetail() {
                     }}
                     >
                         <TabPanel className='px-0' value='taskInfo'>
-                            <Card>
+                            <Card className='rounded-sm mx-4'>
                                 <CardHeader floated={false} shadow={false}>
                                     <div className="flex gap-2 items-center">
                                         {taskDetails.taskPriority !== 'Normal' && <p className={taskDetails.taskPriority === 'High' ? 'h-3 w-3 rounded-full bg-red-900' : 'h-5 w-5 rounded-full bg-amber-900'}></p>}
@@ -311,7 +311,7 @@ function TaskDetail() {
                             </Card>
                         </TabPanel>
                         <TabPanel className='px-0' value='taskActivities'>
-                            <Card>
+                            <Card className='rounded-sm mx-4'>
                                 <CardHeader floated={false} shadow={false}>
                                     <div className="flex gap-2 items-center">
                                         {taskDetails.taskPriority !== 'Normal' && <p className={taskDetails.taskPriority === 'High' ? 'h-3 w-3 rounded-full bg-red-900' : 'h-5 w-5 rounded-full bg-amber-900'}></p>}

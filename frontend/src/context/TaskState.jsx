@@ -163,6 +163,7 @@ function TaskState(props) {
                 headers: {
                     "Content-Type": "application/json",
                     "authToken": localStorage.getItem('authToken'),
+                    "admin": localStorage.getItem('admin'),
                 }
             });
             const data = await response.json();
