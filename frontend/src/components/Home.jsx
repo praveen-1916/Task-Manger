@@ -42,10 +42,10 @@ function Home() {
                 <div className='flex-grow bg-gray-50'>
                     <Routes>
                         <Route exact path='/' element={<Dashboard />} />
-                        <Route exact path='/allTasks' element={<AllTasks />} />
-                        <Route exact path='/tasks/:status' element={<AllTasks />} />
-                        <Route exact path='/task/:taskId' element={<TaskDetail />} />
-                        <Route exact path='/teamMembers' element={<TeamMembers />} />
+                        <Route exact path='allTasks' element={<AllTasks />} />
+                        <Route exact path='tasks/:status' element={<AllTasks />} />
+                        <Route exact path='task/:taskId' element={<TaskDetail />} />
+                        <Route exact path='teamMembers' element={<TeamMembers />} />
                     </Routes>
                 </div>
             </div>

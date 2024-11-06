@@ -393,7 +393,7 @@ export function AddSubTaskForm() {
     }
 
     return (
-        <Card color="transparent" shadow={false} >
+        <Card color="transparent">
             <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
                 <Typography variant="h4" color="blue-gray">
                     Add Sub-Task
@@ -442,7 +442,7 @@ export function AddTeamMemberForm(props) {
         role: '',
     })
     const context = useContext(TaskContext);
-    const { teamMembers } = context;
+    const { createTeamMemberAccount } = context;
 
     const inputChange = (e) => {
         setTeamMmberDetails({
@@ -461,6 +461,7 @@ export function AddTeamMemberForm(props) {
     const formSubmit = (e) => {
         e.preventDefault();
         console.log(teamMemberDetails);
+        createTeamMemberAccount(teamMemberDetails);
         setTeamMmberDetails({
             firstName: '',
             lastName: '',

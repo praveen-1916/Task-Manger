@@ -9,7 +9,7 @@ const mySecret = "praveen@is@1619@is@praveen"
 
 const router = Router();
 
-router.post('/register', [
+router.post('/createuser', [
     body('firstName', 'Please enter a valid name').isLength({ min: 3 }),
     body('email', 'Please enter a valid email').isEmail(),
     body('password', 'Password contains atleast 5 characters').isLength({ min: 5 }),
@@ -68,7 +68,7 @@ router.post('/createTeamMember', fetchUser, [
     })
 
 router.post('/login', [
-    body('email', 'Please enter a valid name').isLength({ min: 3 }),
+    body('email', 'Please enter a valid email').isEmail(),
     body('password', 'Password contains atleast 3 characters').isLength({ min: 5 })
 ],
     async (req, res) => {

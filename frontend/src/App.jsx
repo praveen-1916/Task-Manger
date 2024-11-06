@@ -1,8 +1,10 @@
 import './App.css'
 import Home from './components/Home';
 import NavbarSimple from './components/NavbarSimple';
-import { BrowserRouter as Router } from "react-router-dom"
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 import TaskState from './context/TaskState';
+import Login from './components/login';
+import SignUp from './components/SignUp';
 // import TaskDetail from './components/TaskDetail';
 
 
@@ -12,9 +14,17 @@ function App() {
     <>
       <Router>
         <TaskState>
-          <NavbarSimple />
-          <Home />
-          {/* <TaskDetail /> */}
+          <Routes>
+            <Route exact path='/login' element={<Login />} />
+            <Route exact path='/signup' element={<SignUp />} />
+            <Route exact path='/*' element={
+              <>
+                <NavbarSimple />
+                <Home />
+              </>
+            } />
+          </Routes>
+
         </TaskState>
       </Router>
     </>

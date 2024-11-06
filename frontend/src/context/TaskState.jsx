@@ -194,8 +194,6 @@ function TaskState(props) {
 
     // adding activities to task with proper security
 
-
-
     const addActivity = async (taskId, activityDetails) => {
         try {
             const apiUrl = import.meta.env.VITE_URL_END_POINT + import.meta.env.VITE_ADD_ACTIVITY + taskId;
@@ -217,6 +215,7 @@ function TaskState(props) {
         }
     }
 
+
     //adding a subtask to a particular task
 
     const [openAddSubTaskForm, setOpenAddSubTaskForm] = React.useState(false);
@@ -230,8 +229,6 @@ function TaskState(props) {
         setSubTaskId(id);
         setOpenAddSubTaskForm(!openAddSubTaskForm);
     }
-
-
 
     const addSubTask = async (taskId, subTaskDetails) => {
         try {
@@ -254,9 +251,67 @@ function TaskState(props) {
         }
     }
 
+    //ADDING LOGIN COMPONENT FUNCTIONALITY
+
+    const createUserAccount = async (userDetails) => {
+        try {
+            const apiUrl = import.meta.env.VITE_URL_END_POINT + import.meta.env.VITE_SIGNUP;
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userDetails),
+            });
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    const createTeamMemberAccount = async (teamMemberDetails) => {
+        try {
+            const apiUrl = import.meta.env.VITE_URL_END_POINT + import.meta.env.VITE_ADD_MEMBER;
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZmYmNjZmMwN2RlOTRkNjBhOTRmZThkIn0sImlhdCI6MTcyOTY3Mzk2Nn0.0cTrpO3RK8haJQQ2VgitohW0mjinys1zsSkjAHlZET0"
+                },
+                body: JSON.stringify(teamMemberDetails),
+            });
+            const data = await response.json();
+            console.log(data);
+            if (data.success) {
+                getTeamMembers();
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    const userLogin = async (userDetails) => {
+        try {
+            const apiUrl = import.meta.env.VITE_URL_END_POINT + import.meta.env.VITE_LOGIN;
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userDetails),
+            });
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+
 
     return (
-        <TaskContext.Provider value={{ createTask, getAllTasks, updateTask, deleteTask, getTeamMembers, teamMembers, allTasks, openEditForm, editingTask, handleOpenEditForm, editTask, taskStatusCheck, statusTasks, getTaskdetails, taskDetails, userDetails, getUser, addActivity, timelineIcons, addSubTask, openAddSubTaskForm, openSubTaskForm, subTaskId, handleOpenAddSubTaskForm }}>
+        <TaskContext.Provider value={{ createTask, getAllTasks, updateTask, deleteTask, getTeamMembers, teamMembers, allTasks, openEditForm, editingTask, handleOpenEditForm, editTask, taskStatusCheck, statusTasks, getTaskdetails, taskDetails, userDetails, getUser, addActivity, timelineIcons, addSubTask, openAddSubTaskForm, openSubTaskForm, subTaskId, handleOpenAddSubTaskForm, createTeamMemberAccount, createUserAccount, userLogin }}>
             {props.children}
         </TaskContext.Provider>
     )

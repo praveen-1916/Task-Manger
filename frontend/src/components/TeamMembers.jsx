@@ -12,6 +12,7 @@ function TeamMembers() {
     const context = useContext(TaskContext);
     const { teamMembers } = context;
 
+
     const [openAddTeamMemberForm, setOpenAddTeamMemberForm] = React.useState(false);
     const handleOpenAddTeamMemberForm = () => {
         setOpenAddTeamMemberForm(!openAddTeamMemberForm);
@@ -104,7 +105,7 @@ function TeamMembers() {
                         </div>
                     </Card>
                 </div> :
-                <h4>Loading...</h4>}
+                <h4>No Team Members</h4>}
         </>
     )
 }
