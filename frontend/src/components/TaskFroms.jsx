@@ -15,9 +15,10 @@ import {
     Collapse,
     CardHeader,
     CardBody,
-    Chip
+    Chip,
+    CardFooter
 } from "@material-tailwind/react";
-import { ArrowRightCircleIcon, ChevronDownIcon, EyeIcon, EyeSlashIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { ArrowRightCircleIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, EyeIcon, EyeSlashIcon, QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
 import TaskContext from '../context/TaskContext';
 
@@ -97,7 +98,7 @@ export function AddTaskForm(props) {
 
 
     return (
-        <Card color="transparent" shadow={false}>
+        <Card color="transparent">
             <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
                 <Typography variant="h4" color="blue-gray">
                     Add Task
@@ -113,44 +114,28 @@ export function AddTaskForm(props) {
             <CardBody>
                 <form onSubmit={formSubmit}>
                     <div className="mb-1 flex flex-col gap-6">
-                        {/* <Typography variant="h6"  color="blue-gray" className="-mb-3">
-                        Task Name
-                    </Typography> */}
                         <Input name='taskName' required minLength={3} onChange={inputChange} label='Name' placeholder='Enter Task Name' />
-                        {/* <Typography variant="h6" color="blue-gray" className="-mb-3">
-                        Task Description
-                    </Typography> */}
                         <Input name='taskDescription' required minLength={5} onChange={inputChange} label='Description' placeholder='Enter Task Description' />
-                        <div>
-                            {/* <Typography variant="h6" color="blue-gray" className="mb-3">
-                                Task Priority
-                            </Typography> */}
-                            <Select onChange={selectPriority} label='Select Priority'>
-                                <Option value='High'>High Priority</Option>
-                                <Option value='Low'>Low Priority</Option>
-                                <Option value='Normal'>Normal Priority</Option>
-                            </Select>
-                        </div>
-                        <div>
-                            {/* <Typography variant="h6" color="blue-gray" className="mb-3">
-                                Task Status
-                            </Typography> */}
-                            <Select onChange={selectStatus} label="Select Status">
-                                <Option value='In Progress'>In Progress</Option>
-                                <Option value='ToDo'>ToDo</Option>
-                                <Option value='Completed'>Completed</Option>
-                            </Select>
-                        </div>
+                        <Select onChange={selectPriority} label='Select Priority'>
+                            <Option value='High'>High Priority</Option>
+                            <Option value='Low'>Low Priority</Option>
+                            <Option value='Normal'>Normal Priority</Option>
+                        </Select>
+                        <Select onChange={selectStatus} label="Select Status">
+                            <Option value='In Progress'>In Progress</Option>
+                            <Option value='ToDo'>ToDo</Option>
+                            <Option value='Completed'>Completed</Option>
+                        </Select>
 
-                        <div>
+                        <div className='relative'>
                             <Button onClick={toggleOpen} fullWidth variant='outlined' className={`flex justify-between items-center px-3 py-[10px] border-gray-400 ${open ? 'border-black border-2' : ''}`} style={{ '--tw-ring-opacity': 0 }}>
                                 <p className='font-light text-gray-600'>Select Users</p>
-                                <ChevronDownIcon
-                                    strokeWidth={2.5}
+                                <ChevronUpIcon
+                                    strokeWidth={5}
                                     className={`h-3 w-3 transition-transform ${open && "rotate-180"}`} />
                             </Button>
-                            <Collapse open={open} >
-                                <Card shadow={false}>
+                            <Collapse className='absolute -top-64 bg-white shadow-lg shadow-blue-gray-500/10' open={open} >
+                                <Card className='border border-blue-gray-50 rounded-md'>
                                     <List>
                                         {teamMembers.map(({ firstName, lastName, _id, role }) => (
                                             // <Badge content={role}>
@@ -233,7 +218,7 @@ export function EditTaskForm() {
         // console.log(task);
     }
     return (
-        <Card color="transparent" shadow={false}>
+        <Card color="transparent">
             <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
                 <Typography variant="h4" color="blue-gray">
                     Edit Task
@@ -321,7 +306,7 @@ export function AddTaskTimelineForm(props) {
     }
 
     return (
-        <Card color="transparent" shadow={false} >
+        <Card color="transparent" >
             <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
                 <Typography variant="h4" color="blue-gray">
                     Add Activity
@@ -388,7 +373,6 @@ export function AddSubTaskForm() {
 
     const formSubmit = (e) => {
         e.preventDefault();
-        console.log(subTaskId)
         addSubTask(subTaskId, subTaskDetails);
     }
 
@@ -481,7 +465,7 @@ export function AddTeamMemberForm(props) {
     }
 
     return (
-        <Card color="transparent" shadow={false}>
+        <Card color="transparent">
             <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
                 <Typography variant="h4" color="blue-gray">
                     Add Team Member
@@ -512,6 +496,35 @@ export function AddTeamMemberForm(props) {
                     </Button>
                 </form>
             </CardBody>
+        </Card>
+    )
+}
+
+export function DeleteTaskDialog() {
+
+    const context = useContext(TaskContext);
+    const { handleOpenDeleteDialog, deleteTask, deleteTaskId } = context;
+
+    const confirmDeleteTask = () => {
+        deleteTask(deleteTaskId);
+        handleOpenDeleteDialog();
+    }
+
+
+    return (
+        <Card >
+            <CardHeader className='mx-auto' shadow={false} floated={false} >
+                <QuestionMarkCircleIcon className='h-16 w-16 text-red-600' />
+            </CardHeader>
+            <CardBody className='text-center'>
+                <Typography className='tracking-wide' variant='small' color='blue-gray'>Are you sure you want to delete the selected task?</Typography>
+            </CardBody>
+            <CardFooter>
+                <div className='flex items-center justify-center gap-4'>
+                    <Button variant='gradient' color='white' onClick={handleOpenDeleteDialog}>Cancel</Button>
+                    <Button variant='gradient' color='red' onClick={confirmDeleteTask}>Confirm</Button>
+                </div>
+            </CardFooter>
         </Card>
     )
 }

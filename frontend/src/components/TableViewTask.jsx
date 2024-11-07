@@ -13,14 +13,14 @@ const TABLE_HEAD = ["Task Title", "Priority", "Created On", "Status", "Team"];
 export default function TableViewTask(props) {
     const { tasks } = props;
     const context = useContext(TaskContext);
-    const { editTask } = context;
+    const { editTask, openDeleteTaskDialog } = context;
 
     const taskDate = (date) => {
         return new Date(date).toLocaleDateString();
     }
 
     return (
-        <Card className="h-full w-full overflow-hidden">
+        <Card className="h-full w-full overflow-hidden rounded">
             <table className="w-full min-w-min table-fixed text-left">
                 <thead>
                     <tr>
@@ -133,23 +133,25 @@ export default function TableViewTask(props) {
                                     ))}
                                 </div>
                             </td>
-                            {localStorage.getItem('admin') === 'true' && <td className="p-2" onClick={() => { editTask(task) }}>
-                                <Tooltip content="Edit" animate={{
-                                    mount: { scale: 1, y: 0 },
-                                    unmount: { scale: 0, y: 25 },
-                                }}>
-                                    <PencilIcon className='h-5 w-5' />
-                                </Tooltip>
-                            </td>}
-                            {localStorage.getItem('admin') === 'true' && <td className="p-2">
-                                <Tooltip content="Delete" className='bg-red-500/25 text-red-500'
-                                    animate={{
+                            {localStorage.getItem('admin') === 'true' &&
+                                <td className="p-2" onClick={() => { editTask(task) }}>
+                                    <Tooltip content="Edit" animate={{
                                         mount: { scale: 1, y: 0 },
                                         unmount: { scale: 0, y: 25 },
                                     }}>
-                                    <TrashIcon className='h-5 w-5 text-red-500' />
-                                </Tooltip>
-                            </td>}
+                                        <PencilIcon className='h-5 w-5' />
+                                    </Tooltip>
+                                </td>}
+                            {localStorage.getItem('admin') === 'true' &&
+                                <td className="p-2" onClick={() => openDeleteTaskDialog(task._id)}>
+                                    <Tooltip content="Delete" className='bg-red-500/25 text-red-500'
+                                        animate={{
+                                            mount: { scale: 1, y: 0 },
+                                            unmount: { scale: 0, y: 25 },
+                                        }}>
+                                        <TrashIcon className='h-5 w-5 text-red-500' />
+                                    </Tooltip>
+                                </td>}
                         </tr>
                     ))}
                 </tbody>

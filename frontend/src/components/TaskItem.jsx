@@ -23,40 +23,6 @@ import TaskContext from "../context/TaskContext";
 import { useNavigate } from "react-router-dom";
 
 
-// function CardOptions() {
-//     return (
-//         <Menu placement="bottom-end">
-//             <MenuHandler>
-//                 <EllipsisHorizontalIcon className="h-5 w-5" />
-//             </MenuHandler>
-//             <MenuList>
-//                 <MenuItem className="flex items-center gap-2 rounded">
-//                     <FolderOpenIcon className="h-4 w-4" />
-//                     <Typography className="text-xs font-bold">Open Task</Typography>
-//                 </MenuItem>
-//                 <MenuItem className="flex items-center gap-2 rounded">
-//                     <PencilIcon className="h-4 w-4" />
-//                     <Typography className="text-xs font-bold" onClick={() => editTask(task)}>Edit Task</Typography>
-//                 </MenuItem>
-//                 <MenuItem className="flex items-center gap-2 rounded">
-//                     <PlusIcon className="h-4 w-4" />
-//                     <Typography className="text-xs font-bold">Add Sub-Task</Typography>
-//                 </MenuItem>
-//                 <MenuItem className="flex items-center gap-2 rounded">
-//                     <DocumentDuplicateIcon className="h-4 w-4" />
-//                     <Typography className="text-xs font-bold">Duplicate</Typography>
-//                 </MenuItem>
-//                 <MenuItem className="flex items-center gap-2 rounded hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10" color="red">
-//                     <TrashIcon className="h-4 w-4 text-red-500" />
-//                     <Typography className="text-xs font-bold " color="red">Delete</Typography>
-//                 </MenuItem>
-//             </MenuList>
-//         </Menu>
-//     );
-
-// }
-
-
 
 function TaskItem(props) {
 
@@ -77,7 +43,7 @@ function TaskItem(props) {
     }
 
     const context = useContext(TaskContext);
-    const { editTask, openSubTaskForm } = context
+    const { editTask, openSubTaskForm, openDeleteTaskDialog } = context
 
     useEffect(() => {
         colorFunc();
@@ -124,7 +90,7 @@ function TaskItem(props) {
                                 <DocumentDuplicateIcon className="h-4 w-4" />
                                 <Typography className="text-xs font-bold">Duplicate</Typography>
                             </MenuItem>
-                            <MenuItem className="flex items-center gap-2 rounded hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10" color="red">
+                            <MenuItem className="flex items-center gap-2 rounded hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10" color="red" onClick={() => openDeleteTaskDialog(_id)}>
                                 <TrashIcon className="h-4 w-4 text-red-500" />
                                 <Typography className="text-xs font-bold " color="red">Delete</Typography>
                             </MenuItem>

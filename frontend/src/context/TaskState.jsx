@@ -70,8 +70,8 @@ function TaskState(props) {
     const handleOpenEditForm = () => setOpenEditForm(!openEditForm);
 
     const editTask = (task) => {
-        setOpenEditForm(!openEditForm);
         setEditingTask(task);
+        setOpenEditForm(!openEditForm);
     }
 
     const updateTask = async (taskId, taskData) => {
@@ -97,6 +97,15 @@ function TaskState(props) {
 
     //deleting an existing task
 
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+    const handleOpenDeleteDialog = () => setOpenDeleteDialog(!openDeleteDialog);
+
+    const [deleteTaskId, setDeleteTaskId] = useState(null)
+    const openDeleteTaskDialog = (id) => {
+        setDeleteTaskId(id);
+        setOpenDeleteDialog(!openDeleteDialog);
+    }
+
     const deleteTask = async (taskId) => {
         try {
             const apiUrl = import.meta.env.VITE_URL_END_POINT + import.meta.env.VITE_DELETE_TASK + taskId;
@@ -108,6 +117,9 @@ function TaskState(props) {
                 },
             });
             const data = await response.json();
+            if (data.success) {
+                getAllTasks();
+            }
             console.log(data)
         } catch (error) {
             console.error(error.message);
@@ -228,7 +240,6 @@ function TaskState(props) {
 
     const [subTaskId, setSubTaskId] = useState(null)
     const openSubTaskForm = (id) => {
-        console.log('Sub Task Clicked');
         setSubTaskId(id);
         setOpenAddSubTaskForm(!openAddSubTaskForm);
     }
@@ -319,7 +330,7 @@ function TaskState(props) {
 
 
     return (
-        <TaskContext.Provider value={{ createTask, getAllTasks, updateTask, deleteTask, getTeamMembers, teamMembers, allTasks, openEditForm, editingTask, handleOpenEditForm, editTask, taskStatusCheck, statusTasks, getTaskdetails, taskDetails, userDetails, getUser, addActivity, timelineIcons, addSubTask, openAddSubTaskForm, openSubTaskForm, subTaskId, handleOpenAddSubTaskForm, createTeamMemberAccount, createUserAccount, userLogin }}>
+        <TaskContext.Provider value={{ createTask, getAllTasks, updateTask, deleteTask, getTeamMembers, teamMembers, allTasks, openEditForm, editingTask, handleOpenEditForm, editTask, openDeleteDialog, handleOpenDeleteDialog, deleteTaskId, openDeleteTaskDialog, taskStatusCheck, statusTasks, getTaskdetails, taskDetails, userDetails, getUser, addActivity, timelineIcons, addSubTask, openAddSubTaskForm, openSubTaskForm, subTaskId, handleOpenAddSubTaskForm, createTeamMemberAccount, createUserAccount, userLogin }}>
             {props.children}
         </TaskContext.Provider>
     )
