@@ -21,7 +21,7 @@ function TeamMembers() {
     return (
         <>
             <div className='flex items-center justify-between tracking-wide m-6'>
-                <Typography variant='h5' className='drop-shadow-[0_5px_5px_#3949ab]' color='blue-gray'>Team Members</Typography>
+                <Typography variant='h4' className='drop-shadow-[0_5px_5px_#3949ab] hover:drop-shadow-xl' color='blue-gray'>Team Members</Typography>
                 {localStorage.getItem('admin') && <Button color='indigo' variant="gradient" onClick={handleOpenAddTeamMemberForm}>Add Member</Button>}
             </div>
             <Dialog size='sm' open={openAddTeamMemberForm} handler={handleOpenAddTeamMemberForm} >

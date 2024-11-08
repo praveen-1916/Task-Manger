@@ -12,7 +12,7 @@ import {
 import { ListBulletIcon, Squares2X2Icon } from '@heroicons/react/24/solid';
 import TableViewTask from './TableViewTask';
 import BroadViewTask from './BroadViewTask';
-import { AddTaskForm, DeleteTaskDialog, EditTaskForm } from './TaskFroms';
+import { AddTaskForm, DeleteTaskDialog, DuplicateTaskDialog, EditTaskForm } from './TaskFroms';
 import TaskContext from '../context/TaskContext';
 import { useParams } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ import { useParams } from 'react-router-dom';
 function AllTasks() {
 
     const context = useContext(TaskContext);
-    const { openEditForm, handleOpenEditForm, openDeleteDialog, handleOpenDeleteDialog, allTasks, statusTasks, taskStatusCheck } = context;
+    const { openEditForm, handleOpenEditForm, openDeleteDialog, handleOpenDeleteDialog, openDuplicateDialog, handleOpenDuplicateDialog, allTasks, statusTasks, taskStatusCheck } = context;
 
     const [openAddForm, setOpenAddForm] = React.useState(false);
     const handleOpenAddForm = () => {
@@ -40,8 +40,8 @@ function AllTasks() {
     const { status } = useParams();
 
     React.useEffect(() => {
+        console.log(status)
         if (status) {
-            // console.log(status)
             taskStatusCheck(status);
         }
         window.addEventListener("resize", handleWindowResize);
@@ -66,6 +66,9 @@ function AllTasks() {
             </Dialog>
             <Dialog size="sm" open={openDeleteDialog} handler={handleOpenDeleteDialog} >
                 <DeleteTaskDialog />
+            </Dialog>
+            <Dialog size="sm" open={openDuplicateDialog} handler={handleOpenDuplicateDialog} >
+                <DuplicateTaskDialog />
             </Dialog>
 
             <Tabs value="broadView" className='m-6'>

@@ -528,3 +528,32 @@ export function DeleteTaskDialog() {
         </Card>
     )
 }
+
+export function DuplicateTaskDialog() {
+
+    const context = useContext(TaskContext);
+    const { handleOpenDuplicateDialog, createTask, duplicatingTask } = context;
+
+    const confirmDuplicateTask = () => {
+        createTask(duplicatingTask);
+        handleOpenDuplicateDialog();
+    }
+
+
+    return (
+        <Card>
+            <CardHeader className='mx-auto' shadow={false} floated={false} >
+                <QuestionMarkCircleIcon className='h-16 w-16 text-indigo-600' />
+            </CardHeader>
+            <CardBody className='text-center'>
+                <Typography className='tracking-wide' variant='small' color='blue-gray'>Are you sure you want to duplicate the selected task?</Typography>
+            </CardBody>
+            <CardFooter>
+                <div className='flex items-center justify-center gap-4'>
+                    <Button variant='gradient' color='white' onClick={handleOpenDuplicateDialog}>Cancel</Button>
+                    <Button variant='gradient' color='indigo' onClick={confirmDuplicateTask}>Confirm</Button>
+                </div>
+            </CardFooter>
+        </Card>
+    )
+}

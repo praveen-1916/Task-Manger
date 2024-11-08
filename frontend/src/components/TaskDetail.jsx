@@ -163,6 +163,9 @@ function TaskDetail() {
                 <Link to="/allTasks" className="text-base opacity-60">
                     <span>All Tasks</span>
                 </Link>
+                <Link to={`/tasks/${taskDetails.taskStatus}`} className="text-base opacity-60">
+                    <span>{taskDetails.taskStatus}</span>
+                </Link>
                 <Typography className="text-base opacity-60">
                     <span>Detailed Task</span>
                 </Typography>

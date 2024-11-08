@@ -41,6 +41,19 @@ function TaskState(props) {
 
 
     //creating new task 
+
+    //duplicating an existing task
+
+    const [openDuplicateDialog, setOpenDuplicateDialog] = React.useState(false);
+    const handleOpenDuplicateDialog = () => setOpenDuplicateDialog(!openDuplicateDialog);
+
+
+    const [duplicatingTask, setDuplicatingTask] = useState(null)
+    const duplicateTask = (task) => {
+        setDuplicatingTask(task);
+        setOpenDuplicateDialog(!openDuplicateDialog);
+    }
+
     const createTask = async (taskData) => {
         try {
             const apiUrl = import.meta.env.VITE_URL_END_POINT + import.meta.env.VITE_ADD_TASK;
@@ -330,7 +343,7 @@ function TaskState(props) {
 
 
     return (
-        <TaskContext.Provider value={{ createTask, getAllTasks, updateTask, deleteTask, getTeamMembers, teamMembers, allTasks, openEditForm, editingTask, handleOpenEditForm, editTask, openDeleteDialog, handleOpenDeleteDialog, deleteTaskId, openDeleteTaskDialog, taskStatusCheck, statusTasks, getTaskdetails, taskDetails, userDetails, getUser, addActivity, timelineIcons, addSubTask, openAddSubTaskForm, openSubTaskForm, subTaskId, handleOpenAddSubTaskForm, createTeamMemberAccount, createUserAccount, userLogin }}>
+        <TaskContext.Provider value={{ createTask, getAllTasks, updateTask, deleteTask, getTeamMembers, teamMembers, allTasks, openEditForm, editingTask, handleOpenEditForm, editTask, openDeleteDialog, handleOpenDeleteDialog, deleteTaskId, openDeleteTaskDialog, taskStatusCheck, statusTasks, getTaskdetails, taskDetails, userDetails, getUser, addActivity, timelineIcons, addSubTask, openAddSubTaskForm, openSubTaskForm, subTaskId, handleOpenAddSubTaskForm, createTeamMemberAccount, createUserAccount, userLogin, openDuplicateDialog, handleOpenDuplicateDialog, duplicatingTask, duplicateTask }}>
             {props.children}
         </TaskContext.Provider>
     )

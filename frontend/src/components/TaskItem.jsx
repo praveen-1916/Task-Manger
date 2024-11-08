@@ -10,9 +10,10 @@ import {
     PopoverHandler,
     PopoverContent,
     IconButton,
+    Dialog,
 } from "@material-tailwind/react";
 import React, { useContext, useEffect, useState } from "react";
-import { PlusIcon, ChevronDoubleUpIcon, ChevronUpIcon, FolderOpenIcon, EllipsisHorizontalIcon, PencilIcon, DocumentDuplicateIcon, TrashIcon, ArrowsPointingOutIcon } from "@heroicons/react/24/solid";
+import { PlusIcon, ChevronDoubleUpIcon, ChevronUpIcon, FolderOpenIcon, EllipsisHorizontalIcon, PencilIcon, DocumentDuplicateIcon, TrashIcon, ArrowsPointingOutIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 import {
     Menu,
     MenuHandler,
@@ -43,7 +44,7 @@ function TaskItem(props) {
     }
 
     const context = useContext(TaskContext);
-    const { editTask, openSubTaskForm, openDeleteTaskDialog } = context
+    const { editTask, openSubTaskForm, openDeleteTaskDialog, duplicateTask } = context
 
     useEffect(() => {
         colorFunc();
@@ -86,7 +87,7 @@ function TaskItem(props) {
                                 <PlusIcon className="h-4 w-4" />
                                 <Typography className="text-xs font-bold">Add Sub-Task</Typography>
                             </MenuItem>
-                            <MenuItem className="flex items-center gap-2 rounded">
+                            <MenuItem className="flex items-center gap-2 rounded" onClick={() => duplicateTask(task)}>
                                 <DocumentDuplicateIcon className="h-4 w-4" />
                                 <Typography className="text-xs font-bold">Duplicate</Typography>
                             </MenuItem>
