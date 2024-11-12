@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
+import 'dotenv/config';
 
-const mySecret = "praveen@is@1619@is@praveen";
+const mySecret = process.env.MY_SECRET;
+
 
 
 const fetchUser = async (req, res, next) => {

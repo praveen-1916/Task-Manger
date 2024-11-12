@@ -1,6 +1,8 @@
 import { connect } from "mongoose";
+import 'dotenv/config';
 
-const mongoURI = "mongodb+srv://praveen1619:77320384@task-manager-cluster.ak48g.mongodb.net/?";
+
+const mongoURI = process.env.MONGO_URI;
 
 const connectToMongo = async () => {
     await connect(mongoURI);

@@ -4,8 +4,10 @@ import connectToMongo from './database.js';
 import auth from './routes/authentication.js';
 import tasks from "./routes/tasks.js";
 
+
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
+
 
 connectToMongo();
 
@@ -13,7 +15,6 @@ connectToMongo();
 app.use(json());
 //Middleware to access this server data from all origins //Gopi@456//jaggu@167
 app.use(cors());
-
 
 app.use('/auth', auth);
 app.use('/task', tasks);

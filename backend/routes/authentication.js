@@ -4,8 +4,10 @@ import { body, validationResult } from "express-validator";
 import jwt from "jsonwebtoken";
 import User from '../models/UserDetails.js';
 import fetchUser from "../middleware/fetchUser.js";
+import 'dotenv/config';
 
-const mySecret = "praveen@is@1619@is@praveen"
+
+const mySecret = process.env.MY_SECRET;
 
 const router = Router();
 
