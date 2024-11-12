@@ -12,7 +12,7 @@ function Login() {
     })
 
     const context = useContext(TaskContext);
-    const { userLogin } = context;
+    const { userLogin, loginError, loadingLoginBtn } = context;
 
     const inputChange = (e) => {
         setUserDetails({
@@ -36,20 +36,26 @@ function Login() {
     }
 
     return (
-        <div className='md:h-[100vh] h-full py-5 w-full flex items-center justify-center' id='gradiantBackground'>
-            <div className='flex md:flex-row flex-col items-center justify-center gap-16'>
-                <div className='flex flex-col justify-center gap-10 w-80'>
-                    <div>
-                        <Typography variant='h3' className='bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500'>Cloud-based </Typography>
-                        <Typography variant='h1' className='bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500'>Task Manager </Typography>
+        <div className='w-full min-h-screen flex items-center justify-center bg-[#f3f4f6]'>
+            <div className='w-full md:w-auto flex gap-0 md:gap-20 flex-col md:flex-row items-center justify-center'>
+                {/* left side */}
+                <div className='h-full w-full lg:w-2/3'>
+                    <div className='w-full md:max-w-lg 2xl:max-w-3xl flex flex-col items-center justify-center gap-5 md:gap-y-10 md:mt-0 mt-5'>
+                        <Chip color='indigo' variant='gradient' className='shadow-lg shadow-indigo-400 w-min tracking-wide' value='Manage all your tasks in one place' />
+                        <Typography className='flex flex-col gap-0 md:gap-4 text-4xl md:text-5xl lg:text-6xl font-black text-center'>
+                            <span className='bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500'>Cloud-Based</span>
+                            <span className='bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'>Task Manager</span>
+                        </Typography>
+
+                        <div className='w-16 h-16 rounded-full shadow-lg shadow-pink-500 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-bounce'>
+                        </div>
                     </div>
-                    <Typography variant='h6' className='bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500'><span className='text-indigo-900'>Note :</span> If your not a Admin or Manager to your organization then ask your admin for login credentials.</Typography>
-                    <Chip color='indigo' variant='gradient' className='shadow-lg shadow-indigo-400 w-min tracking-wide' value='Manage all your tasks in one place' />
                 </div>
+
                 <Card className='p-12 m-4 shadow-gray-600'>
                     <CardHeader floated={false} shadow={false} className='p-0 m-0'>
                         <div className='flex items-center gap-1 pb-4'>
-                            <CubeIcon className='h-5 w-5' stroke={3} color='indigo' />
+                            <CubeIcon className='h-5 w-5' strokeWidth={3} color='indigo' />
                             <Typography variant='h6' color='gray' className='tracking-wide'>Task Manager</Typography>
                         </div>
                         <Typography variant="h6" color="gray">
@@ -66,13 +72,15 @@ function Login() {
                                 <Input type={passwordType} required name='password' minLength={5} onChange={inputChange} label='Password' placeholder='Enter Password' icon={passwordType === 'password' ? <EyeSlashIcon onClick={showPass} className='h-5 w-5 cursor-pointer' /> : <EyeIcon onClick={showPass} className='h-5 w-5 cursor-pointer' />} />
                             </div>
 
-                            <Button className="mt-6" type='submit' color='indigo' fullWidth>
+                            <Button loading={loadingLoginBtn} className="mt-4" type='submit' color='indigo' fullWidth>
                                 Login
                             </Button>
                         </form>
+
+                        {loginError && <Typography variant='small' color='red' className='mt-2 text-center'>{loginError.errorMsg}</Typography>}
                     </CardBody>
                     <CardFooter className='p-0'>
-                        <Typography variant="small" className="flex justify-center">
+                        <Typography variant="small" className="flex justify-center items-center lg:text-sm md:text-xs text-sm ">
                             Don&apos;t have an account?
                             <Link
                                 to="/signup"
@@ -85,8 +93,8 @@ function Login() {
                     </CardFooter>
                 </Card>
             </div>
-
         </div>
+
     )
 }
 

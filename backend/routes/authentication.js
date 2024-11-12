@@ -92,7 +92,7 @@ router.post('/login', [
                         const authToken = jwt.sign(data, mySecret);
                         res.json({ success: true, authToken, admin: user.admin, msg: 'Login Successfull' });
                     } else {
-                        res.status(400).json({ success: false, errorMsg: 'Please login with correct password credentials' })
+                        res.status(400).json({ success: false, errorMsg: 'Please login with correct credentials' })
                     }
                 }
 

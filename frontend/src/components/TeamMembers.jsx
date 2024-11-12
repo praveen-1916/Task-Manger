@@ -81,9 +81,9 @@ function TeamMembers() {
                         </table>
                     </Card>
                     <Card className='overflow-hidden m-6 rounded-sm md:hidden block'>
-                        <div className="divide-y divide-gray-200 p-3">
+                        <div className="divide-y divide-gray-200 p-6">
                             {teamMembers.map(({ firstName, lastName, role, email }, index) => (
-                                <div key={index} className="pb-2 pt-2 last:pb-0">
+                                <div key={index} className="pb-2 pt-2 first:pt-0 last:pb-0">
                                     <div className="flex items-center gap-5">
                                         <div className="h-12 w-12 flex justify-center items-center rounded-full bg-indigo-900 shadow-md shadow-indigo-600">
                                             <p className='text-white font-medium'>{firstName.slice(0, 1) + lastName.slice(0, 1)}</p>
@@ -105,7 +105,7 @@ function TeamMembers() {
                         </div>
                     </Card>
                 </div> :
-                <h4>No Team Members</h4>}
+                <Typography variant='h5' color='blue-gray' className='text-center m-6' >No Team Members To Show! Please Add Members & Start your journey</Typography>}
         </>
     )
 }

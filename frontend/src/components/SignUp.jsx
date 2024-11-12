@@ -16,7 +16,7 @@ function SignUp() {
     })
 
     const context = useContext(TaskContext);
-    const { createUserAccount } = context;
+    const { createUserAccount, userCreationError, loadingSignUpBtn } = context;
 
     const inputChange = (e) => {
         setNewUserDetails({
@@ -56,20 +56,30 @@ function SignUp() {
     }
 
     return (
-        <div className='md:h-[100vh] h-full py-5 w-full flex items-center justify-center' id='gradiantBackground'>
-            <div className='flex md:flex-row flex-col items-center justify-center gap-16'>
-                <div className='flex flex-col justify-center gap-10 w-80'>
-                    <div>
-                        <Typography variant='h3' className='bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-indigo-500'>Cloud-based </Typography>
-                        <Typography variant='h1' className='bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500'>Task Manager </Typography>
+        <div className='w-full min-h-screen flex items-center justify-center bg-[#f3f4f6]'>
+            <div className='w-full md:w-auto flex gap-0 md:gap-20 flex-col md:flex-row items-center justify-center'>
+                {/* left side */}
+                <div className='h-full w-full lg:w-2/4'>
+                    <div className='w-full md:max-w-lg 2xl:max-w-3xl flex flex-col items-center justify-center gap-5 md:gap-y-10 md:mt-0 mt-5'>
+                        <Chip color='indigo' variant='gradient' className='shadow-lg shadow-indigo-400 w-min tracking-wide' value='Manage all your tasks in one place' />
+                        <Typography className='flex flex-col gap-0 md:gap-4 text-4xl md:text-5xl lg:text-6xl font-black text-center'>
+                            <span className='bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500'>Cloud-Based</span>
+                            <span className='bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500'>Task Manager</span>
+                        </Typography>
+
+                        <div className='flex items-center gap-5'>
+                            <div className='w-16 h-16 rounded-full shadow-lg shadow-pink-500 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-bounce'>
+                            </div>
+                            <div className='w-16 h-16 rounded-full shadow-lg shadow-pink-500 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-spin'>
+                            </div>
+                        </div>
                     </div>
-                    <Typography variant='h6' color='indigo' ><span className='text-pink-500'>Note :</span> If your  a Admin or Manager to your organization then only create account here! && If you wnat to you this website for your personal then go ahead.  </Typography>
-                    <Chip color='indigo' variant='gradient' className='shadow-lg shadow-indigo-400 w-min tracking-wide' value='Manage all your tasks in one place' />
                 </div>
+
                 <Card className='px-12 py-10 m-4 shadow-blue-gray-600'>
                     <CardHeader floated={false} shadow={false} className='p-0 m-0'>
                         <div className='flex items-center gap-1 pb-4'>
-                            <CubeIcon className='h-5 w-5' stroke={3} color='indigo' />
+                            <CubeIcon className='h-5 w-5' strokeWidth={3} color='indigo' />
                             <Typography variant='h6' color='gray' className='tracking-wide'>Task Manager</Typography>
                         </div>
                         <Typography variant="h6" color="gray">
@@ -94,13 +104,15 @@ function SignUp() {
                                     </Typography>
                                 }
                             />
-                            <Button className="mt-4" type='submit' color='indigo' fullWidth>
+                            <Button loading={loadingSignUpBtn} className="mt-4" type='submit' color='indigo' fullWidth>
                                 Create Account
                             </Button>
                         </form>
+
+                        {userCreationError && <Typography variant='small' color='red'>{userCreationError.errorMsg}</Typography>}
                     </CardBody>
                     <CardFooter className='p-0'>
-                        <Typography variant="small" className="flex justify-center">
+                        <Typography variant="small" className="lg:text-sm md:text-xs text:sm flex items-center justify-center">
                             Already have an account?
                             <Link
                                 to="/login"

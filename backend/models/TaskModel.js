@@ -25,7 +25,8 @@ const TaskSchema = new Schema({
             type: String
         },
         iconLabel: {
-            type: String
+            type: String,
+            default: 'Random'
         },
         date: {
             type: Date,
@@ -37,7 +38,7 @@ const TaskSchema = new Schema({
             type: String,
         },
         subTaskRole: {
-            type: String
+            type: String,
         },
         date: {
             type: Date,

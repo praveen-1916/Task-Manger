@@ -9,11 +9,9 @@ import {
     Popover,
     PopoverHandler,
     PopoverContent,
-    IconButton,
-    Dialog,
 } from "@material-tailwind/react";
 import React, { useContext, useEffect, useState } from "react";
-import { PlusIcon, ChevronDoubleUpIcon, ChevronUpIcon, FolderOpenIcon, EllipsisHorizontalIcon, PencilIcon, DocumentDuplicateIcon, TrashIcon, ArrowsPointingOutIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
+import { PlusIcon, ChevronDoubleUpIcon, ChevronUpIcon, FolderOpenIcon, EllipsisHorizontalIcon, PencilIcon, DocumentDuplicateIcon, TrashIcon } from "@heroicons/react/24/solid";
 import {
     Menu,
     MenuHandler,
@@ -97,14 +95,21 @@ function TaskItem(props) {
                             </MenuItem>
                         </MenuList>
                     </Menu> :
-                    <IconButton
-                        size="sm"
-                        variant="text"
-                        className="rounded-full"
-                        onClick={() => navigate(`/task/${_id}`)}
-                    >
-                        <ArrowsPointingOutIcon className="h-4 w-4" stroke={2} />
-                    </IconButton>}
+                    <Menu placement="bottom-end">
+                        <MenuHandler>
+                            <EllipsisHorizontalIcon className="h-5 w-5" />
+                        </MenuHandler>
+                        <MenuList>
+                            <MenuItem className="flex items-center gap-2 rounded" onClick={() => navigate(`/task/${_id}`)}>
+                                <FolderOpenIcon className="h-4 w-4" />
+                                <Typography className="text-xs font-bold">Open Task</Typography>
+                            </MenuItem>
+                            <MenuItem className="flex items-center gap-2 rounded" onClick={() => editTask(task)}>
+                                <PencilIcon className="h-4 w-4" />
+                                <p className="text-xs font-bold">Edit Task</p>
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>}
             </CardHeader>
             <CardBody className="p-4">
                 <div>
@@ -127,7 +132,7 @@ function TaskItem(props) {
                         <div className="flex items-center cursor-pointer">
                             {taskMembers.map(({ firstName, lastName, role, email }, index) => (
                                 <Popover placement="top-end" key={index}>
-                                    <PopoverHandler >
+                                    <PopoverHandler>
                                         <div className="h-8 w-8 -translate-x-1 first:translate-x-0 flex justify-center items-center rounded-full bg-indigo-900 shadow-md shadow-indigo-600">
                                             <p className='text-white text-sm font-medium'>{firstName.slice(0, 1) + lastName.slice(0, 1)}</p>
                                         </div>
@@ -164,12 +169,12 @@ function TaskItem(props) {
                 <div className="divide-y divide-gray-200">
                     {subTask.length > 0 ?
                         subTask.map(({ subTaskName, subTaskRole, date }, index) => (
-                            <div key={index} className='flex items-center gap-2 pb-3 last:pb-0'>
+                            <div key={index} className='flex items-center gap-2 py-3 last:pb-0'>
                                 <div>
                                     <div className='flex items-center gap-4'>
                                         <p className="text-xs font-bold tracking-wide text-gray-600">{taskDate(date)}
                                         </p>
-                                        <Chip color='indigo' value={subTaskRole !== '' ? subTaskRole : 'Sub-Assignment'} className='shadow-md shadow-indigo-600' />
+                                        <Chip color='indigo' value={subTaskRole} className='shadow-md shadow-indigo-600' />
                                     </div>
                                     <Typography className='mt-2 font-semibold text-sm tracking-wide text-gray-700'>
                                         {subTaskName}

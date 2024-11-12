@@ -81,7 +81,7 @@ router.post('/addActivity/:id', fetchUser, [
 
 router.post('/addsubtask/:id', fetchUser, [
     body('subTaskName', 'Please enter a valid name').isLength({ min: 3 }),
-    body('subTaskRole', 'Please enter a valid message').isLength({ min: 3 }),
+    body('subTaskRole', 'Please enter a valid message').notEmpty(),
 ],
     async (req, res) => {
         try {

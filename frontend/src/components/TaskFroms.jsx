@@ -18,7 +18,7 @@ import {
     Chip,
     CardFooter
 } from "@material-tailwind/react";
-import { ArrowRightCircleIcon, ChevronDownIcon, ChevronRightIcon, ChevronUpIcon, EyeIcon, EyeSlashIcon, QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import { ArrowRightCircleIcon, ChevronDownIcon, EyeIcon, EyeSlashIcon, QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
 import TaskContext from '../context/TaskContext';
 
@@ -27,7 +27,6 @@ import TaskContext from '../context/TaskContext';
 export function AddTaskForm(props) {
 
     const [open, setOpen] = useState(false);
-
     const toggleOpen = () => setOpen((cur) => !cur);
 
 
@@ -47,14 +46,12 @@ export function AddTaskForm(props) {
     }
 
     const selectPriority = (e) => {
-        // console.log(e);
         setTask({
             ...task,
             taskPriority: e
         })
     }
     const selectStatus = (e) => {
-        // console.log(e);
         setTask({
             ...task,
             taskStatus: e
@@ -108,7 +105,7 @@ export function AddTaskForm(props) {
                     variant="text"
                     onClick={props.handleOpenAddForm}
                 >
-                    <XMarkIcon className="h-4 w-4 stroke-2" />
+                    <XMarkIcon className="h-4 w-4" strokeWidth={2} />
                 </IconButton>
             </CardHeader>
             <CardBody>
@@ -116,58 +113,58 @@ export function AddTaskForm(props) {
                     <div className="mb-1 flex flex-col gap-6">
                         <Input name='taskName' required minLength={3} onChange={inputChange} label='Name' placeholder='Enter Task Name' />
                         <Input name='taskDescription' required minLength={5} onChange={inputChange} label='Description' placeholder='Enter Task Description' />
-                        <Select onChange={selectPriority} label='Select Priority'>
+                        <Select onChange={selectPriority} onClick={open && toggleOpen} label='Select Priority'>
                             <Option value='High'>High Priority</Option>
                             <Option value='Low'>Low Priority</Option>
                             <Option value='Normal'>Normal Priority</Option>
                         </Select>
-                        <Select onChange={selectStatus} label="Select Status">
+                        <Select onChange={selectStatus} onClick={open && toggleOpen} label="Select Status">
                             <Option value='In Progress'>In Progress</Option>
                             <Option value='ToDo'>ToDo</Option>
                             <Option value='Completed'>Completed</Option>
                         </Select>
 
                         <div className='relative'>
-                            <Button onClick={toggleOpen} fullWidth variant='outlined' className={`flex justify-between items-center px-3 py-[10px] border-gray-400 ${open ? 'border-black border-2' : ''}`} style={{ '--tw-ring-opacity': 0 }}>
+                            <Button onClick={toggleOpen} fullWidth variant='outlined' className={`flex justify-between items-center px-3 py-[10px] border-gray-400 ${open ? 'border-black border' : ''}`} style={{ '--tw-ring-opacity': 0 }}>
                                 <p className='font-light text-gray-600'>Select Users</p>
-                                <ChevronUpIcon
-                                    strokeWidth={5}
+                                <ChevronDownIcon
+                                    strokeWidth={2}
                                     className={`h-3 w-3 transition-transform ${open && "rotate-180"}`} />
                             </Button>
-                            <Collapse className='absolute -top-64 bg-white shadow-lg shadow-blue-gray-500/10' open={open} >
-                                <Card className='border border-blue-gray-50 rounded-md'>
-                                    <List>
-                                        {teamMembers.map(({ firstName, lastName, _id, role }) => (
-                                            // <Badge content={role}>
-                                            <ListItem key={_id} className="p-0">
-                                                <label
-                                                    htmlFor={_id}
-                                                    className="flex w-full cursor-pointer items-center px-3 py-2"
-                                                >
-                                                    <ListItemPrefix className="mr-3">
-                                                        <Checkbox
-                                                            onChange={selectTeamMember}
-                                                            value={_id}
-                                                            id={_id}
-                                                            className="hover:before:opacity-0"
-                                                            containerProps={{
-                                                                className: "p-0",
-                                                            }}
-                                                        />
-                                                    </ListItemPrefix>
-                                                    {/* <Typography color="blue-gray" className="font-medium">
-                                                        {firstName}
-                                                    </Typography> */}
-                                                    <div color="blue-gray" className="font-medium w-full flex justify-between items-center">
-                                                        <Typography color="blue-gray">{firstName} {lastName}</Typography>
-                                                        <Chip color='red' size='sm' value={role} />
-                                                    </div>
-                                                </label>
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </Card>
-                            </Collapse>
+                            {teamMembers.length > 0 ?
+                                <Collapse className={teamMembers.length > 3 ? 'absolute bottom-12 bg-white shadow-lg rounded-md shadow-blue-gray-500/10' : 'mt-2 absolute bg-white shadow-lg rounded-md shadow-blue-gray-500/10'} open={open} >
+                                    <Card className='border border-blue-gray-50 '>
+                                        <List>
+                                            {teamMembers.map(({ firstName, lastName, _id, role }) => (
+                                                <ListItem key={_id} className="p-0">
+                                                    <label
+                                                        htmlFor={_id}
+                                                        className="flex w-full cursor-pointer items-center px-3 py-2"
+                                                    >
+                                                        <ListItemPrefix className="mr-3">
+                                                            <Checkbox
+                                                                onChange={selectTeamMember}
+                                                                value={_id}
+                                                                id={_id}
+                                                                className="hover:before:opacity-0"
+                                                                containerProps={{
+                                                                    className: "p-0",
+                                                                }}
+                                                            />
+                                                        </ListItemPrefix>
+                                                        <div color="blue-gray" className="w-full flex justify-between items-center">
+                                                            <Typography variant='small' color="gray">{firstName} {lastName}</Typography>
+                                                            <Chip color='red' size='sm' className='sm:block hidden' value={role} />
+                                                        </div>
+                                                    </label>
+                                                </ListItem>
+                                            ))}
+                                        </List>
+                                    </Card>
+                                </Collapse> :
+                                <Collapse open={open} className='mt-2 absolute bg-white shadow-lg shadow-blue-gray-500/10'>
+                                    <Typography variant='small' color='blue-gray' className='text-center p-3 border border-blue-gray-50 rounded-md' >No Team Members To Assign Tasks! Please Add Members & Start your journey</Typography>
+                                </Collapse>}
                         </div>
                     </div>
                     <Button className="mt-6" type='submit' onClick={props.handleOpenAddForm} fullWidth>
@@ -215,60 +212,77 @@ export function EditTaskForm() {
     const formSubmit = (e) => {
         e.preventDefault();
         updateTask(_id, editTask)
-        // console.log(task);
     }
     return (
-        <Card color="transparent">
-            <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
-                <Typography variant="h4" color="blue-gray">
-                    Edit Task
-                </Typography>
-                <IconButton
-                    size="sm"
-                    variant="text"
-                    onClick={handleOpenEditForm}
-                >
-                    <XMarkIcon className="h-4 w-4 stroke-2" />
-                </IconButton>
-            </CardHeader>
-            <CardBody>
-                <form onSubmit={formSubmit}>
-                    <div className="mb-1 flex flex-col gap-6">
-                        {/* <Typography variant="h6"  color="blue-gray" className="-mb-3">
-                        Task Name
-                    </Typography> */}
-                        <Input name='taskName' value={editTask.taskName} required minLength={3} onChange={inputChange} label='Edit Name' />
-                        {/* <Typography variant="h6" color="blue-gray" className="-mb-3">
-                        Task Description
-                    </Typography> */}
-                        <Input name='taskDescription' value={editTask.taskDescription} minLength={5} required onChange={inputChange} label='Edit Description' />
-                        <div>
-                            {/* <Typography variant="h6" color="blue-gray" className="mb-3">
-                                Task Priority
-                            </Typography> */}
-                            <Select onChange={selectPriority} value={editTask.taskPriority} label='Change Priority'>
-                                <Option className='mt-1' value='High'>High Priority</Option>
-                                <Option className='mt-1' value='Low'>Low Priority</Option>
-                                <Option className='mt-1' value='Normal'>Normal Priority</Option>
-                            </Select>
-                        </div>
-                        <div>
-                            {/* <Typography variant="h6" color="blue-gray" className="mb-3">
-                                Task Status
-                            </Typography> */}
-                            <Select onChange={selectStatus} value={editTask.taskStatus} label="Change Status">
-                                <Option className='mt-1' value='In Progress'>In Progress</Option>
-                                <Option className='mt-1' value='ToDo'>ToDo</Option>
-                                <Option className='mt-1' value='Completed'>Completed</Option>
-                            </Select>
-                        </div>
-                    </div>
-                    <Button className="mt-6" type='submit' onClick={handleOpenEditForm} fullWidth>
-                        Edit Task
-                    </Button>
-                </form>
-            </CardBody>
-        </Card>
+        <>
+            {localStorage.getItem('admin') === 'true' ?
+                <Card color="transparent">
+                    <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
+                        <Typography variant="h4" color="blue-gray">
+                            Edit Task
+                        </Typography>
+                        <IconButton
+                            size="sm"
+                            variant="text"
+                            onClick={handleOpenEditForm}
+                        >
+                            <XMarkIcon className="h-4 w-4" strokeWidth={2} />
+                        </IconButton>
+                    </CardHeader>
+                    <CardBody>
+                        <form onSubmit={formSubmit}>
+                            <div className="mb-1 flex flex-col gap-6">
+                                <Input name='taskName' value={editTask.taskName} required minLength={3} onChange={inputChange} label='Edit Name' />
+                                <Input name='taskDescription' value={editTask.taskDescription} minLength={5} required onChange={inputChange} label='Edit Description' />
+
+                                <Select onChange={selectPriority} value={editTask.taskPriority} label='Change Priority'>
+                                    <Option className='mt-1' value='High'>High Priority</Option>
+                                    <Option className='mt-1' value='Low'>Low Priority</Option>
+                                    <Option className='mt-1' value='Normal'>Normal Priority</Option>
+                                </Select>
+
+                                <Select onChange={selectStatus} value={editTask.taskStatus} label="Change Status">
+                                    <Option className='mt-1' value='In Progress'>In Progress</Option>
+                                    <Option className='mt-1' value='ToDo'>ToDo</Option>
+                                    <Option className='mt-1' value='Completed'>Completed</Option>
+                                </Select>
+
+                            </div>
+                            <Button className="mt-6" type='submit' onClick={handleOpenEditForm} fullWidth>
+                                Edit Task
+                            </Button>
+                        </form>
+                    </CardBody>
+                </Card> :
+                <Card color="transparent">
+                    <CardHeader floated={false} shadow={false} className='flex justify-between items-center p-6 m-0 pb-0'>
+                        <Typography variant="h4" color="blue-gray">
+                            Update Task
+                        </Typography>
+                        <IconButton
+                            size="sm"
+                            variant="text"
+                            onClick={handleOpenEditForm}
+                        >
+                            <XMarkIcon className="h-4 w-4" strokeWidth={2} />
+                        </IconButton>
+                    </CardHeader>
+                    <CardBody>
+                        <form onSubmit={formSubmit}>
+                            <div className="mb-6">
+                                <Select onChange={selectStatus} value={editTask.taskStatus} label="Change Status">
+                                    <Option className='mt-1' value='In Progress'>In Progress</Option>
+                                    <Option className='mt-1' value='ToDo'>ToDo</Option>
+                                    <Option className='mt-1' value='Completed'>Completed</Option>
+                                </Select>
+                            </div>
+                            <Button className="mt-6" type='submit' onClick={handleOpenEditForm} fullWidth>
+                                Update Task
+                            </Button>
+                        </form>
+                    </CardBody>
+                </Card>}
+        </>
     )
 }
 
@@ -316,7 +330,7 @@ export function AddTaskTimelineForm(props) {
                     variant="text"
                     onClick={handleOpenAddActivityForm}
                 >
-                    <XMarkIcon className="h-4 w-4 stroke-2" />
+                    <XMarkIcon className="h-4 w-4" strokeWidth={2} />
                 </IconButton>
             </CardHeader>
             <CardBody>
@@ -387,7 +401,7 @@ export function AddSubTaskForm() {
                     variant="text"
                     onClick={handleOpenAddSubTaskForm}
                 >
-                    <XMarkIcon className="h-4 w-4 stroke-2" />
+                    <XMarkIcon className="h-4 w-4" strokeWidth={2} />
                 </IconButton>
             </CardHeader>
             <CardBody>
@@ -396,7 +410,7 @@ export function AddSubTaskForm() {
                         {subTaskRoles.map((role, index) => (
                             <Option key={index} value={role}>
                                 <div className='flex items-center gap-2'>
-                                    <ArrowRightCircleIcon className='h-5 w-5' stroke={2} />
+                                    <ArrowRightCircleIcon className='h-5 w-5' strokeWidth={2} />
                                     <Typography variant='small' className='font-medium tracking-wide' color='blue-gray'>{role}</Typography>
                                 </div>
                             </Option>
@@ -444,7 +458,6 @@ export function AddTeamMemberForm(props) {
 
     const formSubmit = (e) => {
         e.preventDefault();
-        console.log(teamMemberDetails);
         createTeamMemberAccount(teamMemberDetails);
         setTeamMmberDetails({
             firstName: '',
@@ -475,7 +488,7 @@ export function AddTeamMemberForm(props) {
                     variant="text"
                     onClick={handleOpenAddTeamMemberForm}
                 >
-                    <XMarkIcon className="h-4 w-4 stroke-2" />
+                    <XMarkIcon className="h-4 w-4" strokeWidth={2} />
                 </IconButton>
             </CardHeader>
             <CardBody>
@@ -491,7 +504,7 @@ export function AddTeamMemberForm(props) {
                             ))}
                         </Select>
                     </div>
-                    <Button className="mt-6" type='submit' fullWidth>
+                    <Button className="mt-6" type='submit' fullWidth onClick={handleOpenAddTeamMemberForm}>
                         Add Member
                     </Button>
                 </form>

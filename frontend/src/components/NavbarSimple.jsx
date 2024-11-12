@@ -24,35 +24,34 @@ import SideBarSimple from "./SidebarSimple";
 import { useNavigate } from "react-router-dom";
 
 
-const profileMenuItems = [
-    {
-        label: "My Profile",
-        icon: UserCircleIcon,
-    },
-    {
-        label: "Edit Profile",
-        icon: Cog6ToothIcon,
-    },
-    {
-        label: "Inbox",
-        icon: InboxArrowDownIcon,
-    },
-    {
-        label: "Help",
-        icon: LifebuoyIcon,
-    },
-    {
-        label: "Sign Out",
-        icon: PowerIcon,
-    },
-];
+// const profileMenuItems = [
+//     {
+//         label: "My Profile",
+//         icon: UserCircleIcon,
+//     },
+//     {
+//         label: "Edit Profile",
+//         icon: Cog6ToothIcon,
+//     },
+//     {
+//         label: "Inbox",
+//         icon: InboxArrowDownIcon,
+//     },
+//     {
+//         label: "Help",
+//         icon: LifebuoyIcon,
+//     },
+//     {
+//         label: "Sign Out",
+//         icon: PowerIcon,
+//     },
+// ];
 
 function ProfileMenu() {
     const navigate = useNavigate();
 
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-    const closeMenu = () => setIsMenuOpen(false);
     const logout = () => {
         localStorage.removeItem('authToken');
         localStorage.removeItem('admin');
@@ -82,32 +81,61 @@ function ProfileMenu() {
                 </Button>
             </MenuHandler>
             <MenuList className="p-1">
-                {profileMenuItems.map(({ label, icon }, key) => {
-                    const isLastItem = key === profileMenuItems.length - 1;
-                    return (
-                        <MenuItem
-                            key={label}
-                            onClick={isLastItem ? logout : closeMenu}
-                            className={`flex items-center gap-2 rounded ${isLastItem
-                                ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
-                                : ""
-                                }`}
-                        >
-                            {React.createElement(icon, {
-                                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
-                                strokeWidth: 2,
-                            })}
-                            <Typography
-                                as="span"
-                                variant="small"
-                                className="font-normal"
-                                color={isLastItem ? "red" : "inherit"}
-                            >
-                                {label}
-                            </Typography>
-                        </MenuItem>
-                    );
-                })}
+                <MenuItem className="flex items-center gap-2 rounded" onClick={() => navigate('/profile')}>
+                    <UserCircleIcon className="h-4 w-4" strokeWidth={2} />
+                    <Typography
+                        as="span"
+                        variant="small"
+                        className="font-normal"
+                        color="inherit"
+                    >
+                        My Profile
+                    </Typography>
+                </MenuItem>
+                <MenuItem className="flex items-center gap-2 rounded">
+                    <Cog6ToothIcon className="h-4 w-4" strokeWidth={2} />
+                    <Typography
+                        as="span"
+                        variant="small"
+                        className="font-normal"
+                        color="inherit"
+                    >
+                        Edit Profile
+                    </Typography>
+                </MenuItem>
+                <MenuItem className="flex items-center gap-2 rounded">
+                    <InboxArrowDownIcon className="h-4 w-4" strokeWidth={2} />
+                    <Typography
+                        as="span"
+                        variant="small"
+                        className="font-normal"
+                        color="inherit"
+                    >
+                        Inbox
+                    </Typography>
+                </MenuItem>
+                <MenuItem className="flex items-center gap-2 rounded">
+                    <LifebuoyIcon className="h-4 w-4" strokeWidth={2} />
+                    <Typography
+                        as="span"
+                        variant="small"
+                        className="font-normal"
+                        color="inherit"
+                    >
+                        Help
+                    </Typography>
+                </MenuItem>
+                <MenuItem className="flex items-center gap-2 rounded hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10" onClick={logout}>
+                    <PowerIcon className="h-4 w-4 text-red-500" strokeWidth={2} />
+                    <Typography
+                        as="span"
+                        variant="small"
+                        className="font-normal"
+                        color="red"
+                    >
+                        Sign Out
+                    </Typography>
+                </MenuItem>
             </MenuList>
         </Menu>
     );

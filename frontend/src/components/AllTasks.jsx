@@ -40,7 +40,6 @@ function AllTasks() {
     const { status } = useParams();
 
     React.useEffect(() => {
-        console.log(status)
         if (status) {
             taskStatusCheck(status);
         }
@@ -101,10 +100,6 @@ function AllTasks() {
                             : <BroadViewTask tasks={allTasks} />}
                     </TabPanel>
                     <TabPanel className='px-0' value='tableView'>
-                        {/* {status && tableView ? <TableViewTask tasks={statusTasks} /> : <Typography variant='h6' color='blue-gray' className='text-center mt-8'>Table view is not supported in small screens. Please switch to the Broad View</Typography>}
-
-                        {!status && tableView ? <TableViewTask tasks={allTasks} /> : <Typography variant='h6' color='blue-gray' className='text-center mt-8'>Table view is not supported in small screens. Please switch to the Broad View</Typography>} */}
-
                         {status ?
                             tableView ?
                                 <TableViewTask tasks={statusTasks} /> :
@@ -112,7 +107,8 @@ function AllTasks() {
                             :
                             tableView ?
                                 <TableViewTask tasks={allTasks} /> :
-                                <Typography variant='h6' color='blue-gray' className='text-center mt-8'>Table view is not supported in small screens. Please switch to the Broad View</Typography>}
+                                <Typography variant='h6' color='blue-gray' className='text-center mt-8'>Table view is not supported in small screens. Please switch to the Broad View</Typography>
+                        }
 
                     </TabPanel>
                 </TabsBody>

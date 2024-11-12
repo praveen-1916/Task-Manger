@@ -29,87 +29,6 @@ import TaskContext from '../context/TaskContext';
 import { Link, useParams } from 'react-router-dom';
 import { AddTaskTimelineForm } from './TaskFroms';
 
-// const taskDetails = {
-//     "_id": "671a156ec51109fbd95c7d13",
-//     "taskName": "Task Manager",
-//     "taskDescription": "Create a full stack task manager website using MERN stack",
-//     "taskPriority": "High",
-//     "taskStatus": "In Progress",
-//     "taskMembers": [
-//         {
-//             "_id": "66fbd0604a2dfe80bff48670",
-//             "firstName": "Gopi",
-//             "lastName": "Battu",
-//             "role": "Developer"
-//         },
-//         {
-//             "_id": "6718c53f7929ce82ffcb462d",
-//             "firstName": "Hemanth",
-//             "lastName": "Akurathi",
-//             "role": "Tester"
-//         },
-//         {
-//             "_id": "6718c53f7929ce82ffcb462d",
-//             "firstName": "Hemanth",
-//             "lastName": "Battu",
-//             "role": "UX Designer"
-//         }
-//     ],
-//     "date": "2024-10-23T16:36:45.000Z",
-//     "adminId": "66fbccfc07de94d60a94fe8d",
-//     "taskTimeLine": [
-//         {
-//             "userName": "Praveen kumar Battu",
-//             "userMsg": "This is praveen",
-//             "iconLabel": "Started",
-//             "date": "2024-10-23T18:48:45.000Z",
-//         },
-//         {
-//             "userName": "Praveen kumar Battu",
-//             "userMsg": "This is praveen",
-//             "date": "2024-10-23T18:52:45.000Z",
-//             "iconLabel": "Commented",
-//         },
-//         {
-//             "userName": "Praveen kumar Battu",
-//             "userMsg": "This is praveen",
-//             "date": "2024-10-27T18:59:45.000Z",
-//             "iconLabel": "Completed",
-//         },
-//         {
-//             "userName": "Praveen kumar Battu",
-//             "userMsg": "This is praveen",
-//             "date": "2024-10-27T18:59:45.000Z",
-//             "iconLabel": "Bug",
-//         },
-//         {
-//             "userName": "Praveen kumar Battu",
-//             "userMsg": "This is praveen",
-//             "date": "2024-10-27T18:59:45.000Z",
-//             "iconLabel": "Doubt",
-//         },
-//         {
-//             "userName": "Praveen kumar Battu",
-//             "userMsg": "This is praveen",
-//             "date": "2024-10-27T18:59:45.000Z",
-//             "iconLabel": "In Progress",
-//         },
-//     ],
-//     "subTask": [
-//         {
-//             "subTaskName": "Create a login component",
-//             "subTaskRole": "Designing"
-//         },
-//         {
-//             "subTaskName": "Admin dashboard",
-//             "subTaskRole": "Website App"
-//         }
-//     ]
-// }
-
-
-
-
 
 function TaskDetail() {
 
@@ -163,9 +82,9 @@ function TaskDetail() {
                 <Link to="/allTasks" className="text-base opacity-60">
                     <span>All Tasks</span>
                 </Link>
-                <Link to={`/tasks/${taskDetails.taskStatus}`} className="text-base opacity-60">
+                {taskDetails && <Link to={`/tasks/${taskDetails.taskStatus}`} className="text-base opacity-60">
                     <span>{taskDetails.taskStatus}</span>
-                </Link>
+                </Link>}
                 <Typography className="text-base opacity-60">
                     <span>Detailed Task</span>
                 </Typography>
@@ -287,13 +206,13 @@ function TaskDetail() {
                                                 // <div>
                                                 <div key={index} className='flex items-center gap-5 py-3 last:pb-0'>
                                                     <div className='h-10 w-10 rounded-full shadow-lg shadow-indigo-600 flex items-center justify-center bg-indigo-900'>
-                                                        <ArrowRightStartOnRectangleIcon stroke={5} className='h-6 w-6' color='white' />
+                                                        <ArrowRightStartOnRectangleIcon strokeWidth={5} className='h-6 w-6' color='white' />
                                                     </div>
                                                     <div>
                                                         <div className='flex items-center gap-4'>
                                                             <p className="text-sm font-bold tracking-wide text-gray-600">{taskDate(date)}
                                                             </p>
-                                                            <Chip color='indigo' value={subTaskRole !== '' ? subTaskRole : 'Sub-Assignment'} className='shadow-md shadow-indigo-600' />
+                                                            <Chip color='indigo' value={subTaskRole ? subTaskRole : 'Sub-Assignment'} className='shadow-md shadow-indigo-600' />
                                                         </div>
                                                         <Typography color="blue-gray" className='mt-2'>
                                                             {subTaskName}
@@ -346,7 +265,7 @@ function TaskDetail() {
                                                                     <Typography variant="small" color="gray" className="font-normal">
                                                                         {taskTimelineDate(date)}
                                                                     </Typography>
-                                                                    <Chip color='indigo' value={iconLabel} className='shadow-md shadow-indigo-600' />
+                                                                    <Chip color='indigo' value={iconLabel ? iconLabel : 'Random'} className='shadow-md shadow-indigo-600' />
                                                                 </div>
                                                             </div>
                                                         </TimelineHeader>
