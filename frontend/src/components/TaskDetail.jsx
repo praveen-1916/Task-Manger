@@ -13,6 +13,7 @@ import {
     Button,
     Chip,
     Dialog,
+    Spinner,
 } from "@material-tailwind/react";
 
 import {
@@ -292,7 +293,9 @@ function TaskDetail() {
                         </TabPanel>
                     </TabsBody >
                 </Tabs > :
-                <h3>Loading...</h3>
+                <div className='flex items-center justify-center'>
+                    <Spinner className='h-10 w-10' />
+                </div>
             }
         </>
     )

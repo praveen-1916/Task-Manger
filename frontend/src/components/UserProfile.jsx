@@ -3,9 +3,7 @@ import {
     Card,
     CardHeader,
     CardBody,
-    CardFooter,
     Typography,
-    Button,
     Chip,
 } from "@material-tailwind/react";
 import React from 'react'
@@ -21,13 +19,12 @@ function UserProfile() {
         <>
             <Typography variant='h3' className=' m-6 drop-shadow-[0_5px_5px_#3949ab] hover:drop-shadow-xl' color='blue-gray'>My Profile</Typography>
             <Card className="m-6 rounded-sm">
-                <CardHeader floated={false} shadow={false} className="flex flex-col items-center justify-center gap-3">
+                <CardHeader floated={false} shadow={false} className="m-6 mb-0 flex flex-col items-center justify-center gap-5ks">
                     <Typography color="blue-gray" className="tracking-wide font-normal text-2xl">Your Details</Typography>
                     <div className="bg-gradient-to-tr from-indigo-500 to-pink-500 shadow-lg shadow-indigo-300 w-32 h-32 rounded-full flex items-center justify-center">
                         <UserIcon className="h-24 w-24 text-white" />
                     </div>
-                    <Chip className="mt-4 w-max" size={role.length > 7 ? 'md' : 'lg'} color="indigo" value={role} />
-
+                    <Chip className="w-max" size={role.length > 7 ? 'md' : 'lg'} color="indigo" value={role} />
                 </CardHeader>
                 <CardBody>
                     <div className="grid sm:grid-cols-2 gap-4 tracking-wide">
@@ -57,9 +54,6 @@ function UserProfile() {
                         </div>
                     </div>
                 </CardBody>
-                <CardFooter className="pt-0">
-                    <Button>Show More</Button>
-                </CardFooter>
             </Card>
         </>
     )
