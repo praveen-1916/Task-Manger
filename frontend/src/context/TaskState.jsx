@@ -243,7 +243,7 @@ function TaskState(props) {
     }
 
     // fetching user details
-    const [userDetails, setUserDetails] = useState()
+    const [userDetails, setUserDetails] = useState(null);
     const getUser = async () => {
         setProgress(10);
         try {
