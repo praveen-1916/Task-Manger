@@ -1,5 +1,6 @@
 # Fullstack Task Manager (MERN)
 
+##Live Demo : https://cloud-based-task-manger.onrender.com
 
 
 # Overview
@@ -13,7 +14,7 @@ In a dynamic work environment, effective task management is crucial for team suc
 
 
 ### **Background**:
-With the rise of remote work and dispersed teams, there is a growing need for tools that facilitate effective communication and task coordination. The Cloud-Based Task Manager addresses this need by leveraging modern web technologies to create an intuitive and responsive task management solution. The MERN stack ensures scalability, while the integration of Redux Toolkit, Headless UI, and Tailwind CSS enhances user experience and performance.
+With the rise of remote work and dispersed teams, there is a growing need for tools that facilitate effective communication and task coordination. The Cloud-Based Task Manager addresses this need by leveraging modern web technologies to create an intuitive and responsive task management solution. The MERN stack ensures scalability, while the integration of Context API, Material Tailwind UI, and Tailwind CSS enhances user experience and performance.
 
 
 ### 
