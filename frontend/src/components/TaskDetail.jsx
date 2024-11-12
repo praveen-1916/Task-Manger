@@ -156,7 +156,7 @@ function TaskDetail() {
                                             } />}
                                         {taskDetails.taskStatus === "Completed" &&
                                             <Chip variant="ghost" color="green" className='w-min shadow-md shadow-green-600 text-sm' value={taskDetails.taskStatus} icon={
-                                                <span className=" mt-1.5 block h-2 w-2 rounded-full bg-green-900 content-['']" />
+                                                <span className="mx-auto mt-1.5 block h-2 w-2 rounded-full bg-green-900 content-['']" />
                                             } />}
 
                                     </div>
