@@ -108,7 +108,7 @@ function SignUp() {
                             </Button>
                         </form>
 
-                        {userCreationError && <Typography variant='small' color='red'>{userCreationError.errorMsg}</Typography>}
+                        {userCreationError && <Typography variant='small' className='mt-2 text-center' color='red'>{userCreationError.errorMsg}</Typography>}
                     </CardBody>
                     <CardFooter className='p-0'>
                         <Typography variant="small" className="lg:text-sm md:text-xs text:sm flex items-center justify-center">
