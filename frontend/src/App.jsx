@@ -32,7 +32,7 @@ function App() {
             }}
           >
             {alertData.msg}
-          </Al>}
+          </Alert>}
           <Routes>
             <Route exact path='/login' element={<Login />} />
             <Route exact path='/signup' element={<SignUp />} />
