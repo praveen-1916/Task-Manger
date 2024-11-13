@@ -7,14 +7,14 @@ import TeamMembers from './TeamMembers'
 import TaskContext from '../context/TaskContext'
 import TaskDetail from './TaskDetail'
 import { AddSubTaskForm } from './TaskFroms'
-import { Alert, Dialog } from '@material-tailwind/react'
+import { Dialog } from '@material-tailwind/react'
 import LoadingBar from 'react-top-loading-bar'
 import UserProfile from './UserProfile'
 
 function Home() {
     const navigate = useNavigate();
     const context = useContext(TaskContext);
-    const { getAllTasks, getTeamMembers, openAddSubTaskForm, handleOpenAddSubTaskForm, getUser, progress, alertData } = context;
+    const { getAllTasks, getTeamMembers, openAddSubTaskForm, handleOpenAddSubTaskForm, getUser, progress } = context;
 
     const [openNav, setOpenNav] = useState(false);
 

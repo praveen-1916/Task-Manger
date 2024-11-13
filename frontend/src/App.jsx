@@ -8,6 +8,7 @@ import SignUp from './components/SignUp';
 import Footer from './components/Footer';
 import { useContext } from 'react';
 import TaskContext from './context/TaskContext';
+import { Alert } from '@material-tailwind/react';
 
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
             }}
           >
             {alertData.msg}
-          </Alert>}
+          </Al>}
           <Routes>
             <Route exact path='/login' element={<Login />} />
             <Route exact path='/signup' element={<SignUp />} />
