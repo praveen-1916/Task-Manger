@@ -35,7 +35,6 @@ function SignUp() {
 
     const formSubmit = (e) => {
         e.preventDefault();
-        console.log(newUserDetails);
         createUserAccount(newUserDetails);
         setNewUserDetails({
             firstName: '',
